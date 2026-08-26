@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 코드 스팬·링크에 등장하는 저장소 내부 경로
 PAT = re.compile(r'[`(]/?((?:docs|tools|archive|\.github)/[^`)\s]+?\.(?:md|py|html|json))[`)]')
 # 문서 이름만 적힌 경우도 잡는다
-NAME = re.compile(r'`(\[[A-Za-z]+\][A-Za-z0-9\-_.]+\.md)`')
+NAME = re.compile(r'`/?((?:[A-Za-z\-]+/)*\[[A-Za-z]+\][A-Za-z0-9\-_.]+\.md)`')
 
 
 def scan():
@@ -42,7 +42,10 @@ def scan():
         for m in NAME.finditer(s):
             target = m.group(1)
             checked += 1
-            if target not in basenames:
+            # 디렉터리가 붙은 표기는 실제 경로로, 이름만 있으면 파일명으로 확인한다
+            if "/" in target:
+                if target not in known: bad.append((rel, target))
+            elif target not in basenames:
                 bad.append((rel, target))
     return checked, bad
 

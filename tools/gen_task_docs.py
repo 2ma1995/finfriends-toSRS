@@ -44,8 +44,8 @@ def render(t):
         a(f"- SRS 문서(기술 중립판): `{NEUTRAL}` — {' · '.join(neutral_refs)}")
     else:
         a(f"- SRS 문서(기술 중립판): `{NEUTRAL}` — 요구사항 ID는 두 문서가 공유한다")
-    a("- 입력 PRD: `/[PRD]FinFriends-PRD-v1_0.md` — 요구사항의 출처")
-    a("- 포맷 기준: `/[SRS]AD-Core-Platform-Reference.md`\n")
+    a("- 입력 PRD: `/docs/tech-design-docs/[PRD]FinFriends-PRD-v1_0.md` — 요구사항의 출처")
+    a("- 포맷 기준: `/docs/source-docs/[SRS]AD-Core-Platform-Reference.md`\n")
 
     a("## ✅ Task Breakdown (실행 계획)")
     for b in t["breakdown"]:
