@@ -9,7 +9,7 @@ import tasks_data as D
 from gen_task_list import build, EPIC_NAME
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "docs", "[총괄] 개발 실행 계획.md")
+OUT = os.path.join(ROOT, "docs", "plan-docs", "[Plan]FinFriends-Execution-Plan.md")
 
 EFFORT = {"H": 5, "M": 3, "L": 1}          # person-day
 LANE_OF_TYPE = {
@@ -100,7 +100,7 @@ def render(T, plan, cp, cp_len):
     a("**문서 ID:** PLAN-FINFRIENDS-001\n")
     a("**개정 버전:** 1.0\n")
     a("**날짜:** 2026-08-26\n")
-    a("**근거 문서:** TASK-FINFRIENDS-MVP-001 (`[태스크 리스트] 핀프렌즈.md`)\n")
+    a("**근거 문서:** TASK-FINFRIENDS-MVP-001 (`[TaskList]FinFriends-Task-List.md`)\n")
     a("> ⚙️ **이 문서는 생성물이다.** `python3 tools/gen_exec_plan.py` 로 재생성한다. "
       "일정·임계 경로·Gantt는 태스크 데이터에서 계산한 결과이며 수기로 고치지 않는다.\n")
     a("---\n")

@@ -10,7 +10,7 @@
 
 **표준:** ISO/IEC/IEEE 29148:2018 — 확장 절은 근거 조항을 명시한다
 
-**기준 문서:** SRS-FINFRIENDS-MVP-001 (`[SRS 문서] 핀프렌즈 (한글).md` · 기술 중립판)
+**기준 문서:** SRS-FINFRIENDS-MVP-001 (`[SRS]FinFriends-SRS-v1_0.md` · 기술 중립판)
 
 **문서 계열:** 기술 **반영판** — 중립판을 **대체하지 않는 병렬 문서**다. 요구사항 ID(REQ-FUNC · REQ-NF)는 두 문서가 공유한다.
 

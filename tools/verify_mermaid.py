@@ -11,8 +11,8 @@ OUT = os.path.join(ROOT, "tools", "_mermaid_check.html")
 
 def collect():
     items = []
-    for p in sorted(glob.glob(os.path.join(ROOT, "docs", "*.md"))) + \
-             sorted(glob.glob(os.path.join(ROOT, "*.md"))):
+    for p in [q for q in sorted(glob.glob(os.path.join(ROOT, "docs", "**", "*.md"), recursive=True))
+              if os.sep + "tasks" + os.sep not in q] + sorted(glob.glob(os.path.join(ROOT, "*.md"))):
         s = open(p, encoding="utf-8").read()
         for i, m in enumerate(re.finditer(r'```mermaid\n(.*?)\n```', s, re.S), 1):
             items.append({"doc": os.path.basename(p), "idx": i, "src": m.group(1)})

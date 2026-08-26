@@ -6,7 +6,7 @@
 
 **날짜:** 2026-08-26
 
-**근거 문서:** SRS-FINFRIENDS-TEC-001 (`[SRS 문서] 핀프렌즈 (기술제약 반영판).md`)
+**근거 문서:** SRS-FINFRIENDS-TEC-001 (`[SRS]FinFriends-SRS-Tech-v1_0.md`)
 
 **참조 문서:** SRS-FINFRIENDS-MVP-001 (기술 중립판) · 핀프렌즈 PRD v1.0 · 기능정의 v13
 

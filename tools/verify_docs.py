@@ -43,8 +43,8 @@ def check_tables(path):
 
 def main():
     print("문서 정합성 검사\n")
-    docs = sorted(glob.glob(os.path.join(ROOT, "docs", "*.md"))) + \
-           sorted(glob.glob(os.path.join(ROOT, "*.md")))
+    docs = [p for p in sorted(glob.glob(os.path.join(ROOT, "docs", "**", "*.md"), recursive=True))
+            if os.sep + "tasks" + os.sep not in p] + sorted(glob.glob(os.path.join(ROOT, "*.md")))
     print("표 열 정합")
     tot_t = tot_b = 0
     for p in docs:
@@ -63,7 +63,7 @@ def main():
     note(True, f"mermaid {mer}개 · 펜스 균형")
 
     print("\n태스크 앵커")
-    lst = os.path.join(ROOT, "docs", "[태스크 리스트] 핀프렌즈.md")
+    lst = os.path.join(ROOT, "docs", "plan-docs", "[TaskList]FinFriends-Task-List.md")
     s = open(lst, encoding="utf-8").read()
     anchors = set(re.findall(r'<a id="([A-Z]{2,3}-\d{3})"></a>', s))
     ids = {t["id"] for t in D.T}

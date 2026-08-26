@@ -8,9 +8,9 @@
 
 ### 1.1 하는 일
 
-> **기준 템플릿은 `[SRS 문서] AD-Core-Platform (한글).md` 하나입니다.**
+> **기준 템플릿은 `[SRS]AD-Core-Platform-Reference.md` 하나입니다.**
 
-`finfriends-prd-v1_0.md` 에 담긴 내용을, 예시 SRS 문서가 이미 쓰고 있는 **섹션 구성 · 표 스키마 · ID 체계 · 서술 톤**으로 옮겨 적습니다. 도메인만 다를 뿐(광고 플랫폼 → 아동 금융교육), 문서의 **뼈대는 예시 문서를 그대로 따릅니다.**
+`[PRD]FinFriends-PRD-v1_0.md` 에 담긴 내용을, 예시 SRS 문서가 이미 쓰고 있는 **섹션 구성 · 표 스키마 · ID 체계 · 서술 톤**으로 옮겨 적습니다. 도메인만 다를 뿐(광고 플랫폼 → 아동 금융교육), 문서의 **뼈대는 예시 문서를 그대로 따릅니다.**
 
 ### 1.2 하지 않는 일
 
@@ -46,20 +46,35 @@ PRD에는 예시 SRS의 7개 섹션 어디에도 자연스럽게 들어가지 �
 
 | 파일 | 역할 |
 | --- | --- |
-| `finfriends-prd-v1_0.md` | **변환 입력물.** 핀프렌즈 PRD v1.0 (2026-08-24 · 1,236줄) |
-| `[SRS 문서] AD-Core-Platform (한글).md` | **포맷 기준.** 다른 도메인의 완성된 한글 SRS. 이 문서의 골격을 따름 |
-| `docs/[SRS 문서] 핀프렌즈 (한글).md` | **산출물 ①.** 기술 중립판 SRS — 무엇을 만들 것인가 |
-| `docs/[SRS 문서] 핀프렌즈 (기술제약 반영판).md` | **산출물 ②.** 기술 제약 C-TEC-001~007 적용 병렬 SRS |
-| `docs/[설계 문서] 핀프렌즈 (한글).md` | **산출물 ③.** SRS에서 도출한 기술 설계 문서(SDD) — 다이어그램 32개 |
-| `docs/[태스크 리스트] 핀프렌즈.md` | **산출물 ④.** 실행 태스크 **67건** (Epic 17 · 유형 · 선행/후행 · 복잡도). `tools/tasks_data.py` 에서 **생성** — 직접 편집 금지 |
+| `docs/source-docs/[SRS]AD-Core-Platform-Reference.md` | **포맷 기준.** 다른 도메인의 완성된 한글 SRS. 이 문서의 골격을 따름 |
+| `docs/tech-design-docs/[PRD]FinFriends-PRD-v1_0.md` | **변환 입력물.** 핀프렌즈 PRD v1.0 (2026-08-24 · 1,236줄) |
+| `docs/tech-design-docs/[SRS]FinFriends-SRS-v1_0.md` | **산출물 ①.** 기술 중립판 SRS — 무엇을 만들 것인가 |
+| `docs/tech-design-docs/[SRS]FinFriends-SRS-Tech-v1_0.md` | **산출물 ②.** 기술 제약 C-TEC-001~007 적용 병렬 SRS |
+| `docs/tech-design-docs/[Diagrams]FinFriends-Diagrams.md` | **산출물 ③.** SRS에서 도출한 기술 설계 문서(SDD) — 다이어그램 32개 |
+| `docs/plan-docs/[TaskList]FinFriends-Task-List.md` | **산출물 ④.** 실행 태스크 **67건** (Epic 17 · 유형 · 선행/후행 · 복잡도). `tools/tasks_data.py` 에서 **생성** — 직접 편집 금지 |
 | `docs/tasks/*.md` | **산출물 ⑤.** 태스크별 GitHub Issue 명세 **67건** — 생성물 |
-| `docs/[총괄] 개발 실행 계획.md` | **산출물 ⑥.** DAG · 임계 경로 · 자원 제약 Gantt — 생성물 |
-| `html/SRS_핀프렌즈_v1_0.md` · `.html` | **분리 전 단일 SRS**와 그 HTML 열람본 (참고용 · 갱신 대상 아님). 현행 SRS는 `docs/` 의 두 문서다 |
+| `docs/plan-docs/[Plan]FinFriends-Execution-Plan.md` | **산출물 ⑥.** 실행 전략 · DAG · 임계 경로 · 자원 제약 Gantt (6명 · 91일) |
+| `docs/plan-docs/[Plan]FinFriends-Fast-Track-Schedule.md` | **산출물 ⑦.** 최대 병렬 압축안 (14명 · 46일 · 임계 경로 하한) |
+| `docs/ops-docs/[Ops]GitHub-Project-View-Setup.md` | **산출물 ⑧.** GitHub Project 필드 · 뷰 설정 가이드 |
+| `archive/SRS_핀프렌즈_v1_0.md` · `.html` | **분리 전 단일 SRS**와 HTML 열람본 (참고용 · 갱신 대상 아님) |
 | `tools/` | 생성기와 검증 스크립트 |
 | `.github/ISSUE_TEMPLATE/feature-task.md` | GitHub Project 용 TASK 템플릿 (`tools/make_task_template.py` 생성) |
 | `29148-2018-ISOIECIEEE.pdf` | **확장 근거.** 저작권 문제로 저장소에 포함하지 않음 (`.gitignore` · 로컬 전용) |
 
----
+### 2.1 디렉터리 규칙
+
+문서는 **역할별 디렉터리**로 나누고, 파일명은 `[분류]이름-v버전.md` 규칙을 씁니다. 공백과 한글을 파일명에서 뺀 이유는 **URL · 셸 · CI에서 이스케이프가 필요 없게** 하기 위해서입니다.
+
+```
+docs/
+├── source-docs/       포맷 기준 예시 SRS
+├── tech-design-docs/  기술 문서 — PRD v1.0 · SRS 중립판 · SRS 기술제약판 · 설계 다이어그램
+├── plan-docs/         실행 계획 — 태스크 리스트 · 개발 실행 계획 · 압축 수행 일정
+├── ops-docs/          운영 — GitHub Project 필드 · 뷰 설정 가이드
+└── tasks/             태스크별 이슈 명세 67건 (파일명 = 태스크 ID)
+```
+
+`docs/tasks/` 만 이름을 그대로 뒀습니다. 파일명이 이미 태스크 ID(`DAT-001.md`)이고, **등록된 GitHub Issue 67건이 이 경로로 매핑**돼 있습니다.
 
 ## 3. 포맷 기준 — 예시 SRS의 골격
 
@@ -108,13 +123,16 @@ PRD의 **결정은 확정**이지만 **기준선은 실측 전**입니다. SRS�
 - [x] 태스크 이슈 명세 67/67건 추출 (`docs/tasks/`)
 - [x] 개발 실행 계획 수립 (DAG · 임계 경로 · Gantt)
 - [x] **설계 문서(SDD) 작성** — 다이어그램 32개 · 파서 검증 통과
+- [x] **GitHub 등록** — 이슈 67건 · 라벨 38종 · 프로젝트 필드 8종 주입
+- [x] **압축 수행 일정** — 임계 경로 하한 도달 최소 인원 탐색
+- [x] **역할별 디렉터리 재배치** — 파일명 규칙 통일 · 링크 검사기 추가
 - [ ] 미해소 3건(D-01 · D-02 · D-03) 처리
 
 ---
 
 ## 6. SRS 변환 결과
 
-`docs/[SRS 문서] 핀프렌즈 (한글).md` — **894줄 · 표 33개 · REQ-FUNC 17건 · REQ-NF 18건**
+`docs/tech-design-docs/[SRS]FinFriends-SRS-v1_0.md` — **894줄 · 표 33개 · REQ-FUNC 17건 · REQ-NF 18건**
 
 ### 1–7장 — 예시 양식 준수
 
@@ -139,7 +157,7 @@ PRD가 이미 확정했으나 예시 양식에 대응 절이 없는 내용만, �
 
 ## 7. 기술 제약 반영판
 
-`docs/[SRS 문서] 핀프렌즈 (기술제약 반영판).md` — **453줄 · 표 21개 · 다이어그램 2개**
+`docs/tech-design-docs/[SRS]FinFriends-SRS-Tech-v1_0.md` — **453줄 · 표 21개 · 다이어그램 2개**
 
 중립판이 **무엇을 만들 것인가**를 정의한다면, 이 문서는 **주어진 스택으로 어떻게 성립시킬 것인가**를 정의합니다. 원본을 대체하지 않는 **병렬 문서**입니다.
 
@@ -178,7 +196,7 @@ PRD가 이미 확정했으나 예시 양식에 대응 절이 없는 내용만, �
 
 ## 8. 설계 문서 (SDD)
 
-`docs/[설계 문서] 핀프렌즈 (한글).md` — **1,461줄 · 다이어그램 32개**
+`docs/tech-design-docs/[Diagrams]FinFriends-Diagrams.md` — **1,461줄 · 다이어그램 32개**
 
 SRS의 요구사항을 **어떻게 구현할지**를 그림으로 정리했고, **새 요구사항은 만들지 않았습니다.**
 
@@ -209,13 +227,13 @@ SRS의 요구사항을 **어떻게 구현할지**를 그림으로 정리했고, 
 
 **우리 문서 41개는 전부 통과**했습니다(SDD 32 · 중립판 4 · 반영판 2 · 실행 계획 3).
 
-> ⚠️ **실패 2건은 입력 PRD(`finfriends-prd-v1_0.md`)의 기존 결함**입니다. 노드 ID가 `C1(성장 증거 부재)` 처럼 치환돼 mermaid 문법이 깨져 있습니다 — GitHub에서도 렌더되지 않습니다. **입력물이라 고치지 않고 기록만** 했습니다. 원본 저장소(`new-rim/finfriends-prd-to-srs`)에 알릴 항목입니다.
+> ⚠️ **실패 2건은 입력 PRD(`[PRD]FinFriends-PRD-v1_0.md`)의 기존 결함**입니다. 노드 ID가 `C1(성장 증거 부재)` 처럼 치환돼 mermaid 문법이 깨져 있습니다 — GitHub에서도 렌더되지 않습니다. **입력물이라 고치지 않고 기록만** 했습니다. 원본 저장소(`new-rim/finfriends-prd-to-srs`)에 알릴 항목입니다.
 
 ---
 
 ## 9. 태스크 리스트
 
-`docs/[태스크 리스트] 핀프렌즈.md` — **태스크 67건 · Epic 17개**
+`docs/plan-docs/[TaskList]FinFriends-Task-List.md` — **태스크 67건 · Epic 17개**
 
 기술제약 반영판 SRS를 실행 가능한 단위로 분해했습니다. 반영판을 기준으로 삼은 이유는, 그 문서만이 **구현 단위**(Server Action · Route Handler · RSC · Cron)를 확정하고 있어 태스크로 쪼갤 수 있기 때문입니다.
 
@@ -253,11 +271,11 @@ SRS에 없는 기능은 넣지 않았고, **의도적으로 제외한 항목은 
 ```
 tools/tasks_data.py     ← 단일 원천 (67 레코드)
         ↓ gen_task_list.py (검증 + 렌더)
-docs/[태스크 리스트] 핀프렌즈.md      ← 생성물 · 직접 편집 금지
+docs/plan-docs/[TaskList]FinFriends-Task-List.md      ← 생성물 · 직접 편집 금지
         ↓ gen_task_docs.py
 docs/tasks/*.md                      ← 생성물 67건
         ↓ gen_exec_plan.py
-docs/[총괄] 개발 실행 계획.md          ← 생성물
+docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 ```
 
 `후행 태스크(Blocks)` 를 수기로 쓰면 반드시 어긋나므로 **역산으로만** 채웁니다. 생성기가 중복 ID · 미정의 선행 · 순환 의존성을 검사하고, 하나라도 걸리면 **문서를 쓰지 않습니다.**
@@ -266,7 +284,7 @@ docs/[총괄] 개발 실행 계획.md          ← 생성물
 
 ## 10. 개발 실행 계획
 
-`docs/[총괄] 개발 실행 계획.md` — 태스크 67건을 **누가 · 어떤 순서로 · 언제** 만드는지 정의합니다.
+`docs/plan-docs/[Plan]FinFriends-Execution-Plan.md` — 태스크 67건을 **누가 · 어떤 순서로 · 언제** 만드는지 정의합니다.
 
 | 항목 | 값 |
 | --- | :-: |
@@ -295,7 +313,43 @@ docs/[총괄] 개발 실행 계획.md          ← 생성물
 
 ---
 
-## 11. 도구
+## 11. 압축 수행 일정 (대안)
+
+`docs/plan-docs/[Plan]FinFriends-Fast-Track-Schedule.md` — 기본 계획을 **대체하지 않는 대안**입니다.
+
+| 안 | 인원 | 완료 | 평균 가동률 |
+| --- | :-: | :-: | :-: |
+| 기본안 | 6명 | **91일** | 44% |
+| **압축안** | **14명** | **46일** | 37% |
+| 임계 경로 하한 | — | **46일** | — |
+
+**46일이 하한입니다** — 임계 경로가 46영업일이라 인원을 더 넣어도 내려가지 않습니다.
+
+### 핵심 발견
+
+- **병목은 백엔드 레인** — 배정 공수 141d를 기본안 2명이 나눠 집니다. 의존성이 풀려도 사람이 없어 기다립니다
+- **증원이 통한 레인은 셋뿐** — 백엔드 · 프론트 · QA. 플랫폼·디자인은 늘려도 완료일이 안 줄어 그대로 뒀습니다
+- 🔴 **수익 체감 지점은 9명 · 58일** — 여기까지 33일을 줄이는 데 3명이 들었고, 남은 12일에 **5명이 더** 듭니다. 인당 효과가 **11.0일 → 2.4일**로 떨어집니다
+- ⚠️ **온보딩 시간이 일정에 없습니다** — 추가 인원이 즉시 생산성을 낸다는 가정입니다
+
+---
+
+## 12. GitHub 등록 현황
+
+`docs/ops-docs/[Ops]GitHub-Project-View-Setup.md` 에 상세가 있습니다.
+
+| 항목 | 값 |
+| --- | :-: |
+| 이슈 | **67건** (`docs/tasks/*.md` 와 1:1 · 의존성은 실제 이슈 번호로 연결) |
+| 라벨 | **38종** |
+| 프로젝트 | **#1 FINFRIENDS-GITHUB_PJT** · 67건 · 필드 누락 0 |
+| 일정 | **2026-09-01 ~ 2027-01-06** |
+
+필드는 전부 계산값입니다 — Sprint는 **DAG 레벨에서 도출**, Priority `P0`은 **임계 경로**, Status `Ready`는 **선행 없음**, 날짜는 **자원 제약 일정의 영업일**을 달력으로 옮긴 것입니다.
+
+---
+
+## 13. 도구
 
 | 도구 | 용도 |
 | --- | --- |
@@ -304,7 +358,10 @@ docs/[총괄] 개발 실행 계획.md          ← 생성물
 | `tools/gen_task_docs.py` | 태스크별 이슈 명세 생성 (`--check` 지원) |
 | `tools/gen_exec_plan.py` | DAG · 임계 경로 · 자원 제약 일정 계산 및 문서 생성 |
 | `tools/verify_docs.py` | 표 열 정합 · mermaid 펜스 · 앵커 집계 · **요구사항 커버리지** 검사 |
+| `tools/gen_fasttrack_plan.py` | 압축 수행 일정 — 임계 경로 하한 도달 최소 인원 탐색 |
 | `tools/verify_mermaid.py` | 다이어그램 **브라우저 파서 검증** 페이지 생성 |
+| `tools/verify_links.py` | 저장소 **내부 경로 참조 검사** — 디렉터리 이동 뒤 필수 |
+| `tools/gh_import.py` | GitHub 라벨 · 이슈 · 프로젝트 임포트 |
 | `tools/make_task_template.py` | GitHub 이슈 템플릿 생성 |
 
 ```bash
@@ -312,7 +369,9 @@ python3 tools/gen_task_list.py     # 태스크 리스트
 python3 tools/gen_task_docs.py     # docs/tasks/*.md
 python3 tools/gen_exec_plan.py     # 실행 계획
 python3 tools/verify_docs.py       # 전체 검증
+python3 tools/gen_fasttrack_plan.py # 압축 수행 일정
 python3 tools/verify_mermaid.py    # 다이어그램 검사 페이지 생성
+python3 tools/verify_links.py      # 경로 참조 검사
 ```
 
 ---

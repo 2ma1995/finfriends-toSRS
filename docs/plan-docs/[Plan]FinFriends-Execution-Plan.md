@@ -6,7 +6,7 @@
 
 **날짜:** 2026-08-26
 
-**근거 문서:** TASK-FINFRIENDS-MVP-001 (`[태스크 리스트] 핀프렌즈.md`)
+**근거 문서:** TASK-FINFRIENDS-MVP-001 (`[TaskList]FinFriends-Task-List.md`)
 
 > ⚙️ **이 문서는 생성물이다.** `python3 tools/gen_exec_plan.py` 로 재생성한다. 일정·임계 경로·Gantt는 태스크 데이터에서 계산한 결과이며 수기로 고치지 않는다.
 

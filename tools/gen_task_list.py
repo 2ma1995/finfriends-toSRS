@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """태스크 리스트 생성기.
 
-tasks_data.py 를 읽어 검증한 뒤 docs/[태스크 리스트] 핀프렌즈.md 를 쓴다.
+tasks_data.py 를 읽어 검증한 뒤 docs/plan-docs/[TaskList]FinFriends-Task-List.md 를 쓴다.
 검증에 하나라도 걸리면 문서를 쓰지 않는다.
 
   python3 tools/gen_task_list.py            생성
@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tasks_data as D
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "docs", "[태스크 리스트] 핀프렌즈.md")
+OUT = os.path.join(ROOT, "docs", "plan-docs", "[TaskList]FinFriends-Task-List.md")
 EPIC_NAME = dict(D.EPICS)
 
 
@@ -91,7 +91,7 @@ def render(T):
     a("**문서 ID:** TASK-FINFRIENDS-MVP-001\n")
     a("**개정 버전:** 1.0\n")
     a("**날짜:** 2026-08-26\n")
-    a("**근거 문서:** SRS-FINFRIENDS-TEC-001 (`[SRS 문서] 핀프렌즈 (기술제약 반영판).md`)\n")
+    a("**근거 문서:** SRS-FINFRIENDS-TEC-001 (`[SRS]FinFriends-SRS-Tech-v1_0.md`)\n")
     a("**참조 문서:** SRS-FINFRIENDS-MVP-001 (기술 중립판) · 핀프렌즈 PRD v1.0 · 기능정의 v13\n")
     a("> ⚙️ **이 문서는 생성물이다.** 단일 원천은 `tools/tasks_data.py` 이며 `python3 tools/gen_task_list.py` 로 재생성한다. "
       "**직접 편집하지 말 것** — `후행 태스크(Blocks)` 는 `선행 태스크` 에서 자동 역산되므로 수기 편집은 반드시 불일치를 만든다.\n")

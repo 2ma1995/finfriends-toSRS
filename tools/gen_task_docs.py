@@ -12,9 +12,9 @@ from gen_task_list import build, EPIC_NAME
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTDIR = os.path.join(ROOT, "docs", "tasks")
 
-NEUTRAL = "/docs/[SRS 문서] 핀프렌즈 (한글).md"
-TECDOC = "/docs/[SRS 문서] 핀프렌즈 (기술제약 반영판).md"
-LIST = "/docs/[태스크 리스트] 핀프렌즈.md"
+NEUTRAL = "/docs/tech-design-docs/[SRS]FinFriends-SRS-v1_0.md"
+TECDOC = "/docs/tech-design-docs/[SRS]FinFriends-SRS-Tech-v1_0.md"
+LIST = "/docs/plan-docs/[TaskList]FinFriends-Task-List.md"
 
 PART_LABEL = {"A": "backend", "B": "design"}
 
@@ -44,8 +44,8 @@ def render(t):
         a(f"- SRS 문서(기술 중립판): `{NEUTRAL}` — {' · '.join(neutral_refs)}")
     else:
         a(f"- SRS 문서(기술 중립판): `{NEUTRAL}` — 요구사항 ID는 두 문서가 공유한다")
-    a("- 입력 PRD: `/finfriends-prd-v1_0.md` — 요구사항의 출처")
-    a("- 포맷 기준: `/[SRS 문서] AD-Core-Platform (한글).md`\n")
+    a("- 입력 PRD: `/[PRD]FinFriends-PRD-v1_0.md` — 요구사항의 출처")
+    a("- 포맷 기준: `/[SRS]AD-Core-Platform-Reference.md`\n")
 
     a("## ✅ Task Breakdown (실행 계획)")
     for b in t["breakdown"]:
