@@ -16,8 +16,8 @@
 
 | 항목 | 값 |
 | --- | :-: |
-| 태스크 | **67건** |
-| 총 공수 | **241 person-day** |
+| 태스크 | **68건** |
+| 총 공수 | **244 person-day** |
 | DAG 레벨 | **12단계** |
 | 임계 경로 | **46일 · 12단계** |
 | 자원 제약 완료 | **91일** |
@@ -54,6 +54,7 @@ flowchart LR
     TEC["TEC<br/>Constraint Gate"]
     CTR["CTR<br/>Contract"]
     DAT["DAT<br/>Data & Schema"]
+    MCK["MCK<br/>Mock & Fixture"]
     CON["CON<br/>Consent & Account"]
     LRN["LRN<br/>Learning"]
     STR["STR<br/>Star Ledger"]
@@ -92,6 +93,7 @@ flowchart LR
     INF --> ANA
     INF --> DAT
     INF --> GRW
+    INF --> MCK
     INF --> NTF
     INF --> PLN
     INF --> PTN
@@ -100,6 +102,9 @@ flowchart LR
     INF --> TEC
     LRN --> CON
     LRN --> GRW
+    MCK --> GRW
+    MCK --> PLN
+    MCK --> STR
     NTF --> TST
     PLN --> GRW
     PLN --> TST
@@ -234,6 +239,7 @@ gantt
     PRC-002 ⭐ 소급 지급과 주기 귀속 :PRC_002, 73, 78
     PRC-003 승인 대기 5건 이상 일괄 승 :PRC_003, 78, 81
     section 백엔드2
+    MCK-001 화면용 목 픽스처 — 정상 · :MCK_001, 6, 9
     DAT-003 학습 콘텐츠 4영역 시드 ·  :DAT_003, 11, 14
     DAT-004 업종 분류 사전과 가맹점 매칭 :DAT_004, 14, 17
     PTN-001 제휴사 어댑터 — 카드 발급  :PTN_001, 17, 22
@@ -278,7 +284,7 @@ gantt
 | 스프린트 | 태스크 | 건수 |
 | :-: | --- | :-: |
 | **S0** | INF-001 · INF-002 · INF-003 · UX-001 · UX-002 · UX-003 · UX-004 · UX-005 · UX-006 | 9 |
-| **S1** | CTR-001 · DAT-001 · DAT-002 · DAT-003 · DAT-004 · INF-004 · SEC-001 · SEC-002 · TEC-001 · TEC-002 | 10 |
+| **S1** | CTR-001 · DAT-001 · DAT-002 · DAT-003 · DAT-004 · INF-004 · MCK-001 · SEC-001 · SEC-002 · TEC-001 · TEC-002 | 11 |
 | **S2** | ANA-001 · CON-001 · CON-002 · CTR-002 · LRN-001 · NTF-001 · PLN-001 · PTN-001 · PTN-002 · PTN-003 · STR-001 · TST-001 | 12 |
 | **S3** | ANA-002 · ANA-003 · CON-003 · CON-004 · CON-005 · GRW-001 · LRN-002 · LRN-003 · NTF-002 · NTF-003 · PLN-002 · PLN-003 · PLN-005 · PRC-001 · PRC-004 · PRC-005 · REL-001 · REL-003 · STR-002 · STR-003 · STR-004 · STR-005 · TST-003 | 23 |
 | **S4** | ANA-004 · GRW-002 · GRW-003 · GRW-004 · GRW-005 · PLN-004 · PLN-006 · PRC-002 · PRC-003 · TST-002 | 10 |
@@ -289,7 +295,7 @@ gantt
 | 레인 | 인원 | 배정 공수 | 가동률 |
 | --- | :-: | :-: | :-: |
 | 플랫폼 | 1 | 37d | 41% |
-| 백엔드 | 2 | 141d | 77% |
+| 백엔드 | 2 | 144d | 79% |
 | 프론트 | 1 | 20d | 22% |
 | 디자인 | 1 | 22d | 24% |
 | QA | 1 | 21d | 23% |
@@ -321,9 +327,9 @@ gantt
 | --- | :-: |
 | 선행-후행 시간 역전 | **0건** |
 | 레인 내 시간 중복 | **0건** |
-| Gantt 배치 | **67/67건 · 중복 0** |
-| DAG 노드 | **67/67 · 누락 0** |
-| DAG 간선 | **117건** |
+| Gantt 배치 | **68/68건 · 중복 0** |
+| DAG 노드 | **68/68 · 누락 0** |
+| DAG 간선 | **122건** |
 | 임계 경로 = 하한 | **46일** (자원 제약 완료 91일) |
 
 ---

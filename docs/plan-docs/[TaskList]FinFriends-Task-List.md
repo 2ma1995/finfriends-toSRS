@@ -30,7 +30,7 @@
 
 | Part | 관점 | ID 접두어 | 산출물 성격 |
 | --- | --- | --- | --- |
-| **Part A** | 백엔드 · 프론트엔드 개발 및 인프라 구성 | `INF` `TEC` `CTR` `DAT` `CON` `LRN` `STR` `PRC` `GRW` `PLN` `NTF` `PTN` `ANA` `SEC` `REL` `TST` | 동작하는 코드 · 구성 |
+| **Part A** | 백엔드 · 프론트엔드 개발 및 인프라 구성 | `INF` `TEC` `CTR` `DAT` `MCK` `CON` `LRN` `STR` `PRC` `GRW` `PLN` `NTF` `PTN` `ANA` `SEC` `REL` `TST` | 동작하는 코드 · 구성 |
 | **Part B** | UI/UX 디자인 | `UX` | 화면 정의 · 디자인 산출물 |
 
 Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한다. 담당자와 리뷰 관점이 다르고, UX 구현 진척을 독립적으로 추적해야 하기 때문이다.
@@ -40,7 +40,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | 유형 | 의미 | 방법론 단계 | 건수 |
 | --- | --- | :-: | :-: |
 | `Contract` | DTO · 스키마 · 열거형 등 공유 계약 | Step 1 | 2 |
-| `Data` | DB 스키마 · 시드 · 사전 데이터 | Step 1 | 4 |
+| `Data` | DB 스키마 · 시드 · 사전 데이터 | Step 1 | 5 |
 | `Read` | 조회 경로 (상태 변경 없음) | Step 2 | 2 |
 | `UI` | **프론트엔드 화면 구현** — 기능 구현(BE)과 분리 | Step 2 | 6 |
 | `Write` | 상태 변경 · Server Action · Cron · 웹훅 | Step 2 | 29 |
@@ -48,7 +48,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | `Infra` | 프레임워크 · 배포 · 게이트 · 외부 연동 배선 | Step 4 | 5 |
 | `NFR` | 보안 · 관측 · 비용 · 복구 | Step 4 | 8 |
 | `Design` | 디자인 토큰 · 화면 정의 | — | 6 |
-| | | **합계** | **67** |
+| | | **합계** | **68** |
 
 > **Epic과 유형은 서로 다른 축이다.** Epic은 *어느 도메인인가*, 유형은 *어떤 성격의 작업인가* 를 뜻하므로 `INF-002`(Platform & Infra / `UI`)처럼 둘이 어긋나 보이는 조합이 정상이다.
 
@@ -60,6 +60,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | `TEC` | Constraint Gate | 2 |
 | `CTR` | Contract | 2 |
 | `DAT` | Data & Schema | 4 |
+| `MCK` | Mock & Fixture | 1 |
 | `CON` | Consent & Account | 5 |
 | `LRN` | Learning | 3 |
 | `STR` | Star Ledger | 5 |
@@ -73,7 +74,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | `REL` | Reliability & Ops | 3 |
 | `TST` | Test | 5 |
 | `UX` | UI/UX Design | 6 |
-| | **합계** | **67** |
+| | **합계** | **68** |
 
 ### 0.5 복잡도 판정 기준
 
@@ -83,7 +84,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | **M** | 기존 패턴의 조합. 설계는 정해져 있고 구현량이 있음 | Server Action 작성 · Cron 엔드포인트 |
 | **L** | 설정 · 선언 수준. 판단이 거의 필요 없음 | 정적 검사 편입 · 잔여율 배치 |
 
-분포: **H 24 · M 39 · L 4**
+분포: **H 24 · M 40 · L 4**
 
 ### 0.6 스프린트 배치
 
@@ -92,7 +93,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | 스프린트 | 태스크 수 | DAG 레벨 |
 | :-: | :-: | :-: |
 | **S0** | 9 | 0~1 |
-| **S1** | 10 | 2~3 |
+| **S1** | 11 | 2~3 |
 | **S2** | 12 | 4~5 |
 | **S3** | 23 | 6~7 |
 | **S4** | 10 | 8~9 |
@@ -107,7 +108,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | Task ID | Epic (도메인) | Feature (기능명) | 유형 | 관련 SRS 참조 | 선행 태스크 (Dependencies) | 후행 태스크 (Blocks) | 복잡도 | 스프린트 |
 |---|---|---|---|---|---|---|---|---|
 | <a id="INF-001"></a>**INF-001** | Platform & Infra | Next.js App Router 앱 생성 · Vercel 연결 · 환경 변수 배선 | `Infra` | §1.5 C-TEC-{001, 007} · §4.3 REQ-TEC-{001, 013, 014} · §6.4 환경 변수 · §3.3 모듈 구조 | None | INF-002 · INF-003 · INF-004 · REL-002 · TEC-001 · TEC-002 | M | S0 |
-| <a id="INF-002"></a>**INF-002** | Platform & Infra | Tailwind CSS + shadcn/ui 설정 및 공통 레이아웃 | `UI` | §1.5 C-TEC-004 · §4.3 REQ-TEC-007 · 중립판 §3 클라이언트 | INF-001 · UX-001 | GRW-003 · INF-004 · PLN-004 · STR-003 | M | S0 |
+| <a id="INF-002"></a>**INF-002** | Platform & Infra | Tailwind CSS + shadcn/ui 설정 및 공통 레이아웃 | `UI` | §1.5 C-TEC-004 · §4.3 REQ-TEC-007 · 중립판 §3 클라이언트 | INF-001 · UX-001 | GRW-003 · INF-004 · MCK-001 · PLN-004 · STR-003 | M | S0 |
 | <a id="INF-003"></a>**INF-003** | Platform & Infra | Supabase · Prisma 연결 및 커넥션 경로 분리 | `Infra` | §1.5 C-TEC-003 · §4.3 REQ-TEC-{004, 005} · §6.4 · ADR-T04 | INF-001 | DAT-001 · PTN-001 · REL-003 · TEC-001 · TEC-002 | M | S0 |
 | <a id="INF-004"></a>**INF-004** | Platform & Infra | PWA 구성 — Service Worker · 설치 유도 | `Infra` | §4.2 REQ-NF-003 조정 · §8 X1 · X3 · ADR-T06 · ADR-T07 | INF-001 · INF-002 | ANA-003 · NTF-001 | M | S1 |
 
@@ -134,6 +135,12 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | <a id="DAT-003"></a>**DAT-003** | Data & Schema | 학습 콘텐츠 4영역 시드 · 회고 문장 풀 적재 | `Data` | 중립판 REQ-FUNC-003 · ACE-5.1 · §6.3 배치 | DAT-001 | LRN-001 · PLN-003 | M | S1 |
 | <a id="DAT-004"></a>**DAT-004** | Data & Schema | 업종 분류 사전과 가맹점 매칭 기준 데이터 | `Data` | 중립판 REQ-FUNC-008 · AC-4.2 · §8 D-03 인접 | DAT-001 | PLN-001 · PTN-003 | M | S1 |
 
+### `MCK` — Mock & Fixture (1건)
+
+| Task ID | Epic (도메인) | Feature (기능명) | 유형 | 관련 SRS 참조 | 선행 태스크 (Dependencies) | 후행 태스크 (Blocks) | 복잡도 | 스프린트 |
+|---|---|---|---|---|---|---|---|---|
+| <a id="MCK-001"></a>**MCK-001** | Mock & Fixture | 화면용 목 픽스처 — 정상 · 경계 · 빈 상태 | `Data` | 중립판 §6.2 데이터 모델 · §6.4 스키마 · 제안 prototype-suggestion.md | INF-002 | GRW-003 · GRW-005 · PLN-004 · STR-003 | M | S1 |
+
 ### `CON` — Consent & Account (5건)
 
 | Task ID | Epic (도메인) | Feature (기능명) | 유형 | 관련 SRS 참조 | 선행 태스크 (Dependencies) | 후행 태스크 (Blocks) | 복잡도 | 스프린트 |
@@ -158,7 +165,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 |---|---|---|---|---|---|---|---|---|
 | <a id="STR-001"></a>**STR-001** | Star Ledger | 별 원장 엔진 — 트리거 8종 · 이중 기입 · 멱등 | `Write` | 중립판 REQ-FUNC-004 · REQ-NF-006 · ACE-2.2 · §4.3 REQ-TEC-011 · ADR-003 | CTR-002 · DAT-001 | CON-004 · LRN-002 · PLN-003 · PRC-001 · PRC-004 · PRC-005 · STR-002 · STR-003 · STR-004 · STR-005 · TST-002 | H | S2 |
 | <a id="STR-002"></a>**STR-002** | Star Ledger | 별 원장 일일 정산 배치와 불일치 알림 | `NFR` | 중립판 REQ-NF-006 · §6.3 배치 · REL-001 | STR-001 · TEC-002 | None | M | S3 |
-| <a id="STR-003"></a>**STR-003** | Star Ledger | 아바타 · 옷장 — Lottie 2.5D 렌더와 차감 연동 | `UI` | §4.2 REQ-FUNC-005 조정 · §8 X2 · ADR-T05 · 중립판 P-13 | STR-001 · UX-003 · INF-002 | None | H | S3 |
+| <a id="STR-003"></a>**STR-003** | Star Ledger | 아바타 · 옷장 — Lottie 2.5D 렌더와 차감 연동 | `UI` | §4.2 REQ-FUNC-005 조정 · §8 X2 · ADR-T05 · 중립판 P-13 | STR-001 · UX-003 · INF-002 · MCK-001 | None | H | S3 |
 | <a id="STR-004"></a>**STR-004** | Star Ledger | 별↔저금통 분리 정적 검사 편입 | `NFR` | 중립판 REQ-NF-010 · S4 · §4.3 REQ-TEC-008 · ADR-003 | TEC-001 · STR-001 | STR-005 | L | S3 |
 | <a id="STR-005"></a>**STR-005** | Star Ledger | 별의 옷장 외 목적지 (분리선 재검토 선행) | `Write` | 중립판 REQ-FUNC-016 · REQ-NF-010 · P-21 | STR-001 · STR-004 | None | M | S3 |
 
@@ -178,9 +185,9 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 |---|---|---|---|---|---|---|---|---|
 | <a id="GRW-001"></a>**GRW-001** | Growth | 나무 상태 엔진 — 승급 조건 논리곱과 영역별 주기 | `Write` | 중립판 REQ-FUNC-001 · AC-2.2 · ACE-2.3 · §6.2.1 · §6.2.3 · ADR-006 | LRN-001 · PRC-005 | GRW-002 · GRW-004 · PRC-002 | H | S3 |
 | <a id="GRW-002"></a>**GRW-002** | Growth | 정체 판정 14일과 원인 조건 단위 표시 | `Write` | 중립판 AC-3.1 · ACE-3.1 · ACE-3.2 · REQ-FUNC-001 | GRW-001 | GRW-003 | M | S4 |
-| <a id="GRW-003"></a>**GRW-003** | Growth | 성장 나무 화면 (RSC) — 4영역 · 실천 근거 · 대기 N건 | `UI` | 중립판 REQ-FUNC-001 · AC-1.1 · AC-1.2 · ACE-1.1 · REQ-NF-001 | GRW-002 · UX-002 · INF-002 | REL-002 · TST-004 | M | S4 |
+| <a id="GRW-003"></a>**GRW-003** | Growth | 성장 나무 화면 (RSC) — 4영역 · 실천 근거 · 대기 N건 | `UI` | 중립판 REQ-FUNC-001 · AC-1.1 · AC-1.2 · ACE-1.1 · REQ-NF-001 | GRW-002 · UX-002 · INF-002 · MCK-001 | REL-002 · TST-004 | M | S4 |
 | <a id="GRW-004"></a>**GRW-004** | Growth | 월간 숲 스냅샷과 전월 대비 델타 7항목 | `Write` | 중립판 REQ-FUNC-009 · AC-1.3 · ACE-1.2 | GRW-001 · PLN-003 | GRW-005 | H | S4 |
-| <a id="GRW-005"></a>**GRW-005** | Growth | 월간 숲 화면 (RSC) — 한 줄 요약과 획득 별 노출 | `UI` | 중립판 AC-1.3 · AC-1.4 · REQ-NF-001 | GRW-004 · UX-002 | None | M | S4 |
+| <a id="GRW-005"></a>**GRW-005** | Growth | 월간 숲 화면 (RSC) — 한 줄 요약과 획득 별 노출 | `UI` | 중립판 AC-1.3 · AC-1.4 · REQ-NF-001 | GRW-004 · UX-002 · MCK-001 | None | M | S4 |
 
 ### `PLN` — Plan & Spending (6건)
 
@@ -189,7 +196,7 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 | <a id="PLN-001"></a>**PLN-001** | Plan & Spending | 소비 계획 카드 CRUD — 어디서 · 업종 · 금액 · 작성 주체 | `Write` | 중립판 REQ-FUNC-008 · AC-4.1 · AC-4.4 · ADR-002 | CTR-002 · DAT-004 | PLN-002 | M | S2 |
 | <a id="PLN-002"></a>**PLN-002** | Plan & Spending | 계획↔실제 결제 매칭 — 정확도 90% · 합계 판정 | `Write` | 중립판 AC-4.2 · ACE-4.1 · ADR-008 · §8 D-01 인접 | PLN-001 · PTN-002 | PLN-003 · PLN-005 | H | S3 |
 | <a id="PLN-003"></a>**PLN-003** | Plan & Spending | 두 갈래 회고 — 지킴 ⭐1 / 넘김 회고만 · 문장 비복원 추출 | `Write` | 중립판 AC-5.1~5.6 · ACE-5.1 · ACE-5.2 · §6.2.5 | PLN-002 · DAT-003 · STR-001 | GRW-004 · PLN-004 · PLN-006 | H | S3 |
-| <a id="PLN-004"></a>**PLN-004** | Plan & Spending | 계획 카드 · 대조 · 회고 화면 | `UI` | 중립판 AC-5.6 · AC-4.3 · REQ-NF-014 | PLN-003 · UX-004 · INF-002 | TST-004 | M | S4 |
+| <a id="PLN-004"></a>**PLN-004** | Plan & Spending | 계획 카드 · 대조 · 회고 화면 | `UI` | 중립판 AC-5.6 · AC-4.3 · REQ-NF-014 | PLN-003 · UX-004 · INF-002 · MCK-001 | TST-004 | M | S4 |
 | <a id="PLN-005"></a>**PLN-005** | Plan & Spending | 소비 내역 — 전월 대비 증감액 상단 · 업종별 집계 | `Read` | 중립판 REQ-FUNC-013 · §8.3 범위 밖 사용자 | PLN-002 | None | M | S3 |
 | <a id="PLN-006"></a>**PLN-006** | Plan & Spending | 회고 문장 풀 잔여율 감시 배치 | `NFR` | 중립판 ACE-5.1 · §6.3 배치 | PLN-003 · TEC-002 | None | L | S4 |
 
@@ -262,12 +269,12 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**한
 
 | 항목 | 결과 |
 | --- | :-: |
-| 고유 ID | 67 / 67 (중복 0) |
+| 고유 ID | 68 / 68 (중복 0) |
 | 미정의 선행 태스크 | 0 |
 | 순환 의존성 | 0 |
 | SRS 참조 미기재 | 0 |
 | 수용 기준 미기재 | 0 |
-| 스프린트 배치 | 67 / 67 (누락 0) |
+| 스프린트 배치 | 68 / 68 (누락 0) |
 | 선행-후행 역전 | 0 (레벨 자동 도출) |
 
 ### 요구사항 커버리지

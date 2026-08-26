@@ -139,15 +139,31 @@ def project(number):
     pid = json.loads(sh(["gh", "project", "view", str(number), "--owner", owner,
                          "--format", "json"]).stdout)["id"]
 
-    items = {}
+    # 이미 들어간 항목은 건너뛴다 — 재실행 시 중복 추가를 막는다
+    existing = {}
+    r = sh(["gh", "project", "item-list", str(number), "--owner", owner,
+            "--limit", "500", "--format", "json"])
+    for it in json.loads(r.stdout)["items"]:
+        c = it.get("content") or {}
+        num = c.get("number")
+        if num is not None:
+            existing[int(num)] = it["id"]
+
+    items, added = {}, 0
     print("이슈를 프로젝트에 추가")
     for t in T:
-        url = f"https://github.com/{REPO}/issues/{m[t['id']]}"
+        num = m[t["id"]]
+        if num in existing:
+            items[t["id"]] = existing[num]
+            continue
+        url = f"https://github.com/{REPO}/issues/{num}"
         r = sh(["gh", "project", "item-add", str(number), "--owner", owner,
                 "--url", url, "--format", "json"])
         items[t["id"]] = json.loads(r.stdout)["id"]
+        added += 1
         print(f"  + {t['id']}")
         time.sleep(0.2)
+    print(f"  신규 {added}건 · 기존 {len(T) - added}건")
 
     print("필드 값 설정")
     muts, batch, done = [], 0, 0

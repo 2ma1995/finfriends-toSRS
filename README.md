@@ -51,8 +51,8 @@ PRD에는 예시 SRS의 7개 섹션 어디에도 자연스럽게 들어가지 �
 | `docs/tech-design-docs/[SRS]FinFriends-SRS-v1_0.md` | **산출물 ①.** 기술 중립판 SRS — 무엇을 만들 것인가 |
 | `docs/tech-design-docs/[SRS]FinFriends-SRS-Tech-v1_0.md` | **산출물 ②.** 기술 제약 C-TEC-001~007 적용 병렬 SRS |
 | `docs/tech-design-docs/[Diagrams]FinFriends-Diagrams.md` | **산출물 ③.** SRS에서 도출한 기술 설계 문서(SDD) — 다이어그램 32개 |
-| `docs/plan-docs/[TaskList]FinFriends-Task-List.md` | **산출물 ④.** 실행 태스크 **67건** (Epic 17 · 유형 · 선행/후행 · 복잡도). `tools/tasks_data.py` 에서 **생성** — 직접 편집 금지 |
-| `docs/tasks/*.md` | **산출물 ⑤.** 태스크별 GitHub Issue 명세 **67건** — 생성물 |
+| `docs/plan-docs/[TaskList]FinFriends-Task-List.md` | **산출물 ④.** 실행 태스크 **68건** (Epic 17 · 유형 · 선행/후행 · 복잡도). `tools/tasks_data.py` 에서 **생성** — 직접 편집 금지 |
+| `docs/tasks/*.md` | **산출물 ⑤.** 태스크별 GitHub Issue 명세 **68건** — 생성물 |
 | `docs/plan-docs/[Plan]FinFriends-Execution-Plan.md` | **산출물 ⑥.** 실행 전략 · DAG · 임계 경로 · 자원 제약 Gantt (6명 · 91일) |
 | `docs/plan-docs/[Plan]FinFriends-Fast-Track-Schedule.md` | **산출물 ⑦.** 최대 병렬 압축안 (14명 · 46일 · 임계 경로 하한) |
 | `docs/analysis-docs/[Analysis]Task-Extraction-Methodology.md` | **산출물 ⑧.** 4단계 추출 방법론 적합성 평가 |
@@ -77,7 +77,7 @@ docs/
 ├── plan-docs/         실행 계획 — 태스크 리스트 · 개발 실행 계획 · 압축 수행 일정
 ├── analysis-docs/     분석 — 추출 방법론 평가 · 축약 가능성 검토
 ├── ops-docs/          운영 — GitHub Project 필드 · 뷰 설정 가이드
-└── tasks/             태스크별 이슈 명세 67건 (파일명 = 태스크 ID)
+└── tasks/             태스크별 이슈 명세 68건 (파일명 = 태스크 ID)
 ```
 
 `docs/tasks/` 만 이름을 그대로 뒀습니다. 파일명이 이미 태스크 ID(`DAT-001.md`)이고, **등록된 GitHub Issue 67건이 이 경로로 매핑**돼 있습니다.
@@ -126,10 +126,10 @@ PRD의 **결정은 확정**이지만 **기준선은 실측 전**입니다. SRS�
 - [x] **기술 중립판 / 기술제약 반영판 분리**
 - [x] 기술 제약 반영판 작성 (REQ-TEC 15건 · ADR-T 10건 · 충돌 대장)
 - [x] 실행 태스크 리스트 도출 (67건 · 커버리지 49/49)
-- [x] 태스크 이슈 명세 67/67건 추출 (`docs/tasks/`)
+- [x] 태스크 이슈 명세 68/68건 추출 (`docs/tasks/`)
 - [x] 개발 실행 계획 수립 (DAG · 임계 경로 · Gantt)
 - [x] **설계 문서(SDD) 작성** — 다이어그램 32개 · 파서 검증 통과
-- [x] **GitHub 등록** — 이슈 67건 · 라벨 38종 · 프로젝트 필드 8종 주입
+- [x] **GitHub 등록** — 이슈 68건 · 라벨 38종 · 프로젝트 필드 8종 주입
 - [x] **압축 수행 일정** — 임계 경로 하한 도달 최소 인원 탐색
 - [x] **역할별 디렉터리 재배치** — 파일명 규칙 통일 · 링크 검사기 추가
 - [x] **분석 문서 2건** — 추출 방법론 적합성 · 축약 가능성 검토
@@ -241,7 +241,7 @@ SRS의 요구사항을 **어떻게 구현할지**를 그림으로 정리했고, 
 
 ## 9. 태스크 리스트
 
-`docs/plan-docs/[TaskList]FinFriends-Task-List.md` — **태스크 67건 · Epic 17개**
+`docs/plan-docs/[TaskList]FinFriends-Task-List.md` — **태스크 68건 · Epic 18개**
 
 기술제약 반영판 SRS를 실행 가능한 단위로 분해했습니다. 반영판을 기준으로 삼은 이유는, 그 문서만이 **구현 단위**(Server Action · Route Handler · RSC · Cron)를 확정하고 있어 태스크로 쪼갤 수 있기 때문입니다.
 
@@ -258,13 +258,13 @@ Part A 안에서도 **UX 구현(유형 `UI`)과 기능 구현(BE)을 분리**합
 
 | 항목 | 결과 |
 | --- | :-: |
-| 고유 ID | 67 / 67 (중복 0) |
+| 고유 ID | 68 / 68 (중복 0) |
 | 미정의 선행 태스크 | 0 |
 | 순환 의존성 | 0 |
 | SRS 참조 미기재 | 0 |
 | 수용 기준 미기재 | 0 |
 | **요구사항 커버리지** | REQ-FUNC **16/16** · REQ-NF **18/18** · REQ-TEC **15/15** |
-| 스프린트 배치 | 67 / 67 (누락 0 · DAG 레벨 자동 도출) |
+| 스프린트 배치 | 68 / 68 (누락 0 · DAG 레벨 자동 도출) |
 
 복잡도 분포는 **H 24 · M 39 · L 4** 입니다.
 
@@ -277,7 +277,7 @@ SRS에 없는 기능은 넣지 않았고, **의도적으로 제외한 항목은 
 ### 생성 체계
 
 ```
-tools/tasks_data.py     ← 단일 원천 (67 레코드)
+tools/tasks_data.py     ← 단일 원천 (68 레코드)
         ↓ gen_task_list.py (검증 + 렌더)
 docs/plan-docs/[TaskList]FinFriends-Task-List.md      ← 생성물 · 직접 편집 금지
         ↓ gen_task_docs.py
@@ -292,7 +292,7 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 ## 10. 개발 실행 계획
 
-`docs/plan-docs/[Plan]FinFriends-Execution-Plan.md` — 태스크 67건을 **누가 · 어떤 순서로 · 언제** 만드는지 정의합니다.
+`docs/plan-docs/[Plan]FinFriends-Execution-Plan.md` — 태스크 68건을 **누가 · 어떤 순서로 · 언제** 만드는지 정의합니다.
 
 | 항목 | 값 |
 | --- | :-: |
@@ -317,7 +317,7 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 ### 검증
 
-선행-후행 시간 역전 **0건** · 레인 내 시간 중복 **0건** · Gantt 배치 **67/67** · DAG 노드 **67/67**.
+선행-후행 시간 역전 **0건** · 레인 내 시간 중복 **0건** · Gantt 배치 **68/68** · DAG 노드 **68/68**.
 
 ---
 
@@ -346,7 +346,7 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 ### 12.1 추출 방법론 적합성 — `[Analysis]Task-Extraction-Methodology.md`
 
-태스크 67건이 **4단계 추출 방법론**(Step 1 계약·데이터 → Step 2 동작 → Step 3 테스트 → Step 4 비기능)을 지켰는지 평가했습니다.
+태스크 68건이 **4단계 추출 방법론**(Step 1 계약·데이터 → Step 2 동작 → Step 3 테스트 → Step 4 비기능)을 지켰는지 평가했습니다.
 
 | 단계 | 건수 | 비중 |
 | :-: | :-: | :-: |
@@ -389,9 +389,9 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 | 항목 | 값 |
 | --- | :-: |
-| 이슈 | **67건** (`docs/tasks/*.md` 와 1:1 · 의존성은 실제 이슈 번호로 연결) |
+| 이슈 | **68건** (`docs/tasks/*.md` 와 1:1 · 의존성은 실제 이슈 번호로 연결) |
 | 라벨 | **38종** |
-| 프로젝트 | **#1 FINFRIENDS-GITHUB_PJT** · 67건 · 필드 누락 0 |
+| 프로젝트 | **#1 FINFRIENDS-GITHUB_PJT** · 68건 · 필드 누락 0 |
 | 일정 | **2026-09-01 ~ 2027-01-06** |
 
 필드는 전부 계산값입니다 — Sprint는 **DAG 레벨에서 도출**, Priority `P0`은 **임계 경로**, Status `Ready`는 **선행 없음**, 날짜는 **자원 제약 일정의 영업일**을 달력으로 옮긴 것입니다.
@@ -444,7 +444,7 @@ CLAUDE.md          Claude Code 진입점 — 짧게 두고 스킬로 라우팅
 
 | 도구 | 용도 |
 | --- | --- |
-| `tools/tasks_data.py` | **단일 원천** — 태스크 67 레코드 |
+| `tools/tasks_data.py` | **단일 원천** — 태스크 68 레코드 |
 | `tools/gen_task_list.py` | 태스크 리스트 생성 (`--check` 로 데이터-문서 일치 확인) |
 | `tools/gen_task_docs.py` | 태스크별 이슈 명세 생성 (`--check` 지원) |
 | `tools/gen_exec_plan.py` | DAG · 임계 경로 · 자원 제약 일정 계산 및 문서 생성 |
