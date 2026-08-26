@@ -58,6 +58,9 @@ PRD에는 예시 SRS의 7개 섹션 어디에도 자연스럽게 들어가지 �
 | `docs/analysis-docs/[Analysis]Task-Extraction-Methodology.md` | **산출물 ⑧.** 4단계 추출 방법론 적합성 평가 |
 | `docs/analysis-docs/[Analysis]Task-Consolidation-Review.md` | **산출물 ⑨.** 병합 후보 8쌍 전수 검토 — **축약하지 않기로 한 근거** |
 | `docs/ops-docs/[Ops]GitHub-Project-View-Setup.md` | **산출물 ⑩.** GitHub Project 필드 · 뷰 설정 가이드 |
+| `docs/ops-docs/[Ops]AI-Harness-Guide.md` | **산출물 ⑪.** AI 개발 하네스 가이드 |
+| `AGENTS.md` · `CLAUDE.md` · `.agents/` · `.claude/` | **AI 개발 하네스** — 규칙 3 · 스킬 11 · 서브에이전트 4 · 워크플로 2 |
+| `skills-lock.json` | 외부 스킬 도입 현황 — **현재 0건** (후보 7 · 제외 3) |
 | `archive/SRS_핀프렌즈_v1_0.md` · `.html` | **분리 전 단일 SRS**와 HTML 열람본 (참고용 · 갱신 대상 아님) |
 | `tools/` | 생성기와 검증 스크립트 |
 | `.github/ISSUE_TEMPLATE/feature-task.md` | GitHub Project 용 TASK 템플릿 (`tools/make_task_template.py` 생성) |
@@ -130,6 +133,7 @@ PRD의 **결정은 확정**이지만 **기준선은 실측 전**입니다. SRS�
 - [x] **압축 수행 일정** — 임계 경로 하한 도달 최소 인원 탐색
 - [x] **역할별 디렉터리 재배치** — 파일명 규칙 통일 · 링크 검사기 추가
 - [x] **분석 문서 2건** — 추출 방법론 적합성 · 축약 가능성 검토
+- [x] **AI 개발 하네스** — 제약 기반 규칙 + 스킬 11종 + 서브에이전트 4종
 - [ ] 미해소 3건(D-01 · D-02 · D-03) 처리
 
 ---
@@ -394,7 +398,49 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 ---
 
-## 14. 도구
+## 14. AI 개발 하네스
+
+`docs/ops-docs/[Ops]AI-Harness-Guide.md` 에 상세가 있습니다.
+
+**목적은 하나입니다** — AI 코딩 도구가 **기술 제약을 조용히 우회하는 것을 막는 것**. 에이전트는 기본적으로
+"더 나은 대안"을 권합니다. Redis · Kafka · 별도 백엔드 · 외부 CI는 일반적으로는 좋은 선택이지만
+**이 프로젝트에서는 금지**입니다.
+
+```
+AGENTS.md          도구 공통 규칙 (Claude Code · Cursor · Gemini CLI · Codex 공용)
+CLAUDE.md          Claude Code 진입점 — 짧게 두고 스킬로 라우팅
+.agents/rules/     3종   프로젝트 개요 · 기술 스택 · 개발 규범
+.agents/skills/   11종   상황별 지침
+.agents/workflows/ 2종   태스크 도출 · 규칙 추가
+.claude/agents/    4종   nextjs-server · prisma-data · ui-shadcn · compliance-gate
+.claude/skills/   11개   → .agents/skills/* 심링크
+```
+
+### 핵심 스킬 2종
+
+| 스킬 | 막는 것 |
+| --- | --- |
+| **`300-tech-constraints-guardrails`** | 금지 구성요소 12종 · **Vercel Cron 대신 `pg_cron`** · 충돌 시 §8 대장 기록 |
+| **`304-compliance-gates`** | **허용 오차 0인 항목 7가지** · 위반 픽스처 필수 |
+
+### 🔴 일반 하네스와 정반대인 것
+
+`303-no-ai-by-default` 는 보통 *"AI를 이렇게 써라"* 인데 여기서는 **"쓰지 마라"** 입니다.
+요구사항 35건 중 **AI 호출을 요구하는 항목이 0건**이기 때문입니다. 회고 문장은 사전 작성 풀에서
+비복원 추출하고, 아바타는 사전 제작 에셋입니다.
+
+그대로 두면 에이전트가 **없는 AI 기능을 구현**하려 듭니다.
+
+### 외부 스킬은 도입하지 않았습니다
+
+`skills-lock.json` 에 **후보 7종과 출처만** 기록했고 **내용을 복사하지 않았습니다.**
+`ai-sdk` 는 AI 미사용이라 **제외**했습니다.
+
+> ⚠️ `.claude/skills/*` 는 심링크입니다. **Windows에서 깨질 수 있으며** 복사본 전환 방법은 가이드 §6에 있습니다.
+
+---
+
+## 15. 도구
 
 | 도구 | 용도 |
 | --- | --- |

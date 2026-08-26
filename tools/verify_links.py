@@ -34,7 +34,8 @@ def scan():
         s = open(p, encoding="utf-8").read()
         for m in PAT.finditer(s):
             target = m.group(1)
-            if "*" in target:      # 와일드카드 표기는 실제 경로가 아니다
+            # 와일드카드(*)와 자리표시자(<TASK-ID>)는 실제 경로가 아니다
+            if "*" in target or "<" in target:
                 continue
             checked += 1
             if target not in known:
