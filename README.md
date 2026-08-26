@@ -55,7 +55,9 @@ PRD에는 예시 SRS의 7개 섹션 어디에도 자연스럽게 들어가지 �
 | `docs/tasks/*.md` | **산출물 ⑤.** 태스크별 GitHub Issue 명세 **67건** — 생성물 |
 | `docs/plan-docs/[Plan]FinFriends-Execution-Plan.md` | **산출물 ⑥.** 실행 전략 · DAG · 임계 경로 · 자원 제약 Gantt (6명 · 91일) |
 | `docs/plan-docs/[Plan]FinFriends-Fast-Track-Schedule.md` | **산출물 ⑦.** 최대 병렬 압축안 (14명 · 46일 · 임계 경로 하한) |
-| `docs/ops-docs/[Ops]GitHub-Project-View-Setup.md` | **산출물 ⑧.** GitHub Project 필드 · 뷰 설정 가이드 |
+| `docs/analysis-docs/[Analysis]Task-Extraction-Methodology.md` | **산출물 ⑧.** 4단계 추출 방법론 적합성 평가 |
+| `docs/analysis-docs/[Analysis]Task-Consolidation-Review.md` | **산출물 ⑨.** 병합 후보 8쌍 전수 검토 — **축약하지 않기로 한 근거** |
+| `docs/ops-docs/[Ops]GitHub-Project-View-Setup.md` | **산출물 ⑩.** GitHub Project 필드 · 뷰 설정 가이드 |
 | `archive/SRS_핀프렌즈_v1_0.md` · `.html` | **분리 전 단일 SRS**와 HTML 열람본 (참고용 · 갱신 대상 아님) |
 | `tools/` | 생성기와 검증 스크립트 |
 | `.github/ISSUE_TEMPLATE/feature-task.md` | GitHub Project 용 TASK 템플릿 (`tools/make_task_template.py` 생성) |
@@ -70,6 +72,7 @@ docs/
 ├── source-docs/       포맷 기준 예시 SRS
 ├── tech-design-docs/  기술 문서 — PRD v1.0 · SRS 중립판 · SRS 기술제약판 · 설계 다이어그램
 ├── plan-docs/         실행 계획 — 태스크 리스트 · 개발 실행 계획 · 압축 수행 일정
+├── analysis-docs/     분석 — 추출 방법론 평가 · 축약 가능성 검토
 ├── ops-docs/          운영 — GitHub Project 필드 · 뷰 설정 가이드
 └── tasks/             태스크별 이슈 명세 67건 (파일명 = 태스크 ID)
 ```
@@ -126,6 +129,7 @@ PRD의 **결정은 확정**이지만 **기준선은 실측 전**입니다. SRS�
 - [x] **GitHub 등록** — 이슈 67건 · 라벨 38종 · 프로젝트 필드 8종 주입
 - [x] **압축 수행 일정** — 임계 경로 하한 도달 최소 인원 탐색
 - [x] **역할별 디렉터리 재배치** — 파일명 규칙 통일 · 링크 검사기 추가
+- [x] **분석 문서 2건** — 추출 방법론 적합성 · 축약 가능성 검토
 - [ ] 미해소 3건(D-01 · D-02 · D-03) 처리
 
 ---
@@ -334,7 +338,48 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 ---
 
-## 12. GitHub 등록 현황
+## 12. 분석 문서
+
+### 12.1 추출 방법론 적합성 — `[Analysis]Task-Extraction-Methodology.md`
+
+태스크 67건이 **4단계 추출 방법론**(Step 1 계약·데이터 → Step 2 동작 → Step 3 테스트 → Step 4 비기능)을 지켰는지 평가했습니다.
+
+| 단계 | 건수 | 비중 |
+| :-: | :-: | :-: |
+| Step 1 계약 · 데이터 | 6 | 9.0% |
+| Step 2 동작 (Write 29 · UI 6 · Read 2) | 37 | 55.2% |
+| Step 3 테스트 | 5 | 7.5% |
+| Step 4 비기능 (NFR 8 · Infra 5) | 13 | 19.4% |
+| Design | 6 | 9.0% |
+
+**핵심 판정**
+
+- ✅ **Step 1이 실제로 앞선다** — 비중은 9%지만 **임계 경로 위에 3건**(DAT-001 · CTR-001 · CTR-002)이 있어 구조적으로 앞설 수밖에 없습니다
+- ⚠️ **「단계 역순」 11건은 위반이 아닙니다** — Step 4의 `Infra`는 **부트스트랩**이라 실행에서는 맨 앞에 옵니다. **방법론의 단계는 추출 순서이지 실행 순서가 아닙니다**
+- 🔴 **TST-004 하나가 수용 기준 51건**을 집니다 — 쪼개면 조각이 너무 작아져 유지하되 「미커버 AC 0건」 검사로 진척을 셉니다
+- ⚠️ **Write가 Step 2의 78%** — 백엔드 병목의 원인이지만, **서버 진입점이 경계**라 그보다 잘게 나누지 않습니다
+
+### 12.2 축약 가능성 — `[Analysis]Task-Consolidation-Review.md`
+
+**결론: 축약하지 않고 67건을 유지합니다.**
+
+객관 기준(같은 Epic ∧ 같은 유형 ∧ 직접 의존 ∧ 복잡도 L/M)으로 **병합 후보 8쌍**을 전수 탐색했고, **0쌍을 병합**했습니다.
+
+| 막은 이유 | 건수 |
+| --- | :-: |
+| 선행의 **후행이 많아** 병합 시 그것들이 함께 지연 | 5쌍 |
+| **블로커**가 걸린 태스크(D2 · D5)를 Must와 묶을 수 없음 | 2쌍 |
+| **우선순위·블로커가 달라서**(Must vs Could) | 1쌍 |
+
+복잡도 `L` 4건도 흡수하지 않았습니다 — **작다는 것이 흡수의 근거가 되지 못합니다.** 담당자가 다르거나(콘텐츠·사업 담당) 규제 게이트·미결을 담고 있어 독립 추적이 필요합니다.
+
+> **우리 이력은 축약이 아니라 승격이었습니다** — 65건에서 커버리지 검사가 REQ-FUNC-015·016 미담당을 지목해 **2건을 승격**해 67건이 됐습니다. 레퍼런스 사례(118→56 축약)와 반대 방향인 이유는 **처음부터 서버 진입점을 경계로 분해**해 과분해가 없었기 때문입니다.
+
+병합 판정 기준은 **원칙 5가지**로 남겼습니다 — 후행 수 · 블로커 · 우선순위 · 담당자 · BE/UI 분리.
+
+---
+
+## 13. GitHub 등록 현황
 
 `docs/ops-docs/[Ops]GitHub-Project-View-Setup.md` 에 상세가 있습니다.
 
@@ -349,7 +394,7 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 
 ---
 
-## 13. 도구
+## 14. 도구
 
 | 도구 | 용도 |
 | --- | --- |
@@ -361,6 +406,7 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 | `tools/gen_fasttrack_plan.py` | 압축 수행 일정 — 임계 경로 하한 도달 최소 인원 탐색 |
 | `tools/verify_mermaid.py` | 다이어그램 **브라우저 파서 검증** 페이지 생성 |
 | `tools/verify_links.py` | 저장소 **내부 경로 참조 검사** — 디렉터리 이동 뒤 필수 |
+| `tools/analyze_tasks.py` | 분석 문서의 **근거 수치 재현** — 단계 분포 · 병합 후보 · 블로커 |
 | `tools/gh_import.py` | GitHub 라벨 · 이슈 · 프로젝트 임포트 |
 | `tools/make_task_template.py` | GitHub 이슈 템플릿 생성 |
 
@@ -372,6 +418,7 @@ python3 tools/verify_docs.py       # 전체 검증
 python3 tools/gen_fasttrack_plan.py # 압축 수행 일정
 python3 tools/verify_mermaid.py    # 다이어그램 검사 페이지 생성
 python3 tools/verify_links.py      # 경로 참조 검사
+python3 tools/analyze_tasks.py     # 분석 문서 근거 수치
 ```
 
 ---

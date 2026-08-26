@@ -114,6 +114,43 @@ def render(T, cp, cp_len, history):
     bottleneck = max(load, key=lambda k: load[k] / base_lanes[k])
     a(f"**병목은 {bottleneck} 레인이다.** 배정 공수 {load[bottleneck]}d 를 기본안 {base_lanes[bottleneck]}명이 나눠 지므로 "
       f"의존성이 풀려도 사람이 없어 기다린다.\n")
+
+    # ── 왜 이만큼 필요한가 — 공수가 아니라 동시성이 인원을 정한다
+    a("### 3.1 왜 공수 계산보다 많은 인원이 필요한가\n")
+    a("공수만 나누면 훨씬 적게 나온다. 그런데도 인원이 더 드는 이유는 **일이 고르게 퍼지지 않기 때문**이다.\n")
+    a("| 레인 | 공수 ÷ 하한일수 | 이론 최소 | 압축안 | 최대 동시 작업 | 평균 동시 |")
+    a("| --- | :-: | :-: | :-: | :-: | :-: |")
+    for ln in base_lanes:
+        peak = collections.Counter()
+        for t in T:
+            if LANE_OF_TYPE[t["type"]] != ln: continue
+            s_, e_, _ = plan[t["id"]]
+            for d in range(s_, e_): peak[d] += 1
+        mx = max(peak.values()) if peak else 0
+        avg = sum(peak.values()) / fast_fin if fast_fin else 0
+        theo = -(-load[ln] // fast_fin)
+        a(f"| {ln} | {load[ln]}d ÷ {fast_fin}일 = {load[ln]/fast_fin:.2f} | {theo}명 | **{fast_lanes[ln]}명** | **{mx}건** | {avg:.1f}건 |")
+    a("")
+    # 병목 레인의 피크 구간
+    peak = collections.Counter()
+    for t in T:
+        if LANE_OF_TYPE[t["type"]] != bottleneck: continue
+        s_, e_, _ = plan[t["id"]]
+        for d in range(s_, e_): peak[d] += 1
+    pd = max(peak, key=lambda d: peak[d])
+    hi = sorted(d for d, v in peak.items() if v == peak[pd])
+    conc = [t for t in T if LANE_OF_TYPE[t["type"]] == bottleneck
+            and plan[t["id"]][0] <= pd < plan[t["id"]][1]]
+    a(f"**인원을 정하는 것은 총 공수가 아니라 피크다.** {bottleneck} 레인은 평균 동시 "
+      f"{sum(peak.values())/fast_fin:.1f}건인데 **{min(hi)}~{max(hi)}일차에 {peak[pd]}건이 몰린다.** "
+      f"이 피크를 받지 못하면 밀린 작업이 임계 경로 뒷부분을 잡아먹어 {fast_fin}일이 성립하지 않는다.\n")
+    a(f"{bottleneck} 피크 구간에 동시 진행되는 {peak[pd]}건:\n")
+    for t in sorted(conc, key=lambda x: x["id"]):
+        a(f"- `{t['id']}` {t['title']}")
+    a("")
+    a(f"> 그래서 압축안의 가동률이 낮다({bottleneck} {load[bottleneck]/(fast_fin*fast_lanes[bottleneck])*100:.0f}%). "
+      f"**상시 필요한 인원이 아니라 피크를 받기 위한 인원**이며, 피크가 지나면 놀게 된다. "
+      f"§5의 주차별 투입 조정이 필요한 이유다.\n")
     a("## 4. 압축안 Gantt\n")
     a("```mermaid")
     a("gantt")
