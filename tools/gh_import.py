@@ -99,16 +99,90 @@ def relink():
     print("relink 완료")
 
 
+BASE_DATE = "2026-09-01"          # 영업일 0일차 기준
+SIZE_OF = {"H": "L", "M": "M", "L": "XS"}
+EFFORT = {"H": 5, "M": 3, "L": 1}
+
+
+def bizday(offset):
+    """영업일 offset 을 달력 날짜로 — 주말 건너뜀"""
+    import datetime
+    d = datetime.date.fromisoformat(BASE_DATE)
+    n = 0
+    while n < offset:
+        d += datetime.timedelta(days=1)
+        if d.weekday() < 5: n += 1
+    while d.weekday() >= 5: d += datetime.timedelta(days=1)
+    return d.isoformat()
+
+
+def fields():
+    r = sh(["gh", "project", "field-list", "1", "--owner", REPO.split("/")[0], "--format", "json"])
+    out = {}
+    for f in json.loads(r.stdout)["fields"]:
+        out[f["name"]] = {"id": f["id"],
+                          "opt": {o["name"]: o["id"] for o in f.get("options", [])} if f.get("options") else {}}
+    return out
+
+
 def project(number):
+    from gen_exec_plan import critical_path, schedule
     T = build()
     m = json.load(open(MAPFILE, encoding="utf-8"))
     owner = REPO.split("/")[0]
+    F = fields()
+    cp, _, _ = critical_path(T)
+    cpset = set(cp)
+    plan = schedule(T)
+
+    # 프로젝트 노드 ID
+    pid = json.loads(sh(["gh", "project", "view", str(number), "--owner", owner,
+                         "--format", "json"]).stdout)["id"]
+
+    items = {}
+    print("이슈를 프로젝트에 추가")
     for t in T:
         url = f"https://github.com/{REPO}/issues/{m[t['id']]}"
-        sh(["gh", "project", "item-add", str(number), "--owner", owner, "--url", url])
-        print(f"  + {t['id']} → 프로젝트")
-        time.sleep(0.3)
-    print(f"프로젝트 {number} 에 {len(T)}건 추가")
+        r = sh(["gh", "project", "item-add", str(number), "--owner", owner,
+                "--url", url, "--format", "json"])
+        items[t["id"]] = json.loads(r.stdout)["id"]
+        print(f"  + {t['id']}")
+        time.sleep(0.2)
+
+    print("필드 값 설정")
+    muts, batch, done = [], 0, 0
+    def flush(muts):
+        if not muts: return
+        q = "mutation {\n" + "\n".join(muts) + "\n}"
+        sh(["gh", "api", "graphql", "-f", f"query={q}"])
+    for t in T:
+        iid = items[t["id"]]
+        start, end, _ = plan[t["id"]]
+        pri = "P0" if t["id"] in cpset else ("P1" if len(t["blocks"]) >= 5 else "P2")
+        status = "Ready" if not t["deps"] else "Backlog"
+        vals = [
+            ("Sprint", "singleSelectOptionId", F["Sprint"]["opt"][t["sprint"]]),
+            ("Epic", "singleSelectOptionId", F["Epic"]["opt"][t["epic"]]),
+            ("Status", "singleSelectOptionId", F["Status"]["opt"][status]),
+            ("Priority", "singleSelectOptionId", F["Priority"]["opt"][pri]),
+            ("Size", "singleSelectOptionId", F["Size"]["opt"][SIZE_OF[t["cx"]]]),
+            ("Estimate", "number", EFFORT[t["cx"]]),
+            ("Start date", "date", bizday(start)),
+            ("Target date", "date", bizday(end)),
+        ]
+        for k, kind, v in vals:
+            val = f'{{{kind}: {v}}}' if kind == "number" else f'{{{kind}: "{v}"}}'
+            batch += 1
+            muts.append(f'm{batch}: updateProjectV2ItemFieldValue(input: {{'
+                        f'projectId: "{pid}", itemId: "{iid}", fieldId: "{F[k]["id"]}", '
+                        f'value: {val}}}) {{ projectV2Item {{ id }} }}')
+        if len(muts) >= 40:
+            flush(muts); muts = []
+        done += 1
+        if done % 10 == 0: print(f"  {done}/{len(T)}")
+    flush(muts)
+    print(f"프로젝트 {number}: {len(T)}건 · 필드 8종 설정 완료")
+    print(f"임계 경로(P0) {len(cpset)}건 · 착수 가능(Ready) {sum(1 for t in T if not t['deps'])}건")
 
 
 if __name__ == "__main__":
