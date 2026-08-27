@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "핀프렌즈 — 화면 프로토타입",
-  description: "UI/UX 시각 확인용 로컬 프로토타입. 기능은 붙어 있지 않다.",
+  title: "핀프렌즈",
+  description: "아이가 배운 것을 실제 돈 행동으로 잇고, 그 변화를 보호자가 읽는다",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// data-mode 를 여기서 주지 않는다. 세그먼트 레이아웃이 부여한다:
+//   child/**   → fun      parent/**  → clean      consent/** → clean
+// 한 페이지에 두 모드를 나란히 놓고 대조할 수 있어야 하므로 :root 가 아니라 래퍼가 갖는다.
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ko" className="h-full antialiased">
-      <body className="min-h-full" style={{ background: "var(--ff-bg)", color: "var(--ff-ink)" }}>
-        {children}
-      </body>
+    <html lang="ko">
+      <body>{children}</body>
     </html>
   );
 }

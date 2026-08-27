@@ -9,14 +9,24 @@ import sys
 
 from PIL import Image
 
-BG = (250, 247, 241)  # --ff-bg
+# 배경으로 치는 색 — 모드마다 캔버스 색이 다르고, 프레임 바깥은 body 색이다.
+# 하나라도 빠지면 그 줄이 「내용 있음」으로 잡혀 여백이 안 잘린다.
+BG = (
+    (236, 232, 225),  # body — 모드 밖 영역
+    (250, 247, 241),  # --ff-canvas (clean)
+    (255, 249, 240),  # --ff-canvas (fun)
+    (255, 255, 255),  # --ff-surface — 카드가 끝까지 깔린 화면 대비
+)
 PAD = 32              # 2배 스케일 기준 = CSS 16px
 TOL = 4               # JPEG 아닌 PNG라 오차는 거의 없지만 여유를 둔다
 
 
 def is_background(row):
     return all(
-        abs(px[0] - BG[0]) <= TOL and abs(px[1] - BG[1]) <= TOL and abs(px[2] - BG[2]) <= TOL
+        any(
+            abs(px[0] - b[0]) <= TOL and abs(px[1] - b[1]) <= TOL and abs(px[2] - b[2]) <= TOL
+            for b in BG
+        )
         for px in row
     )
 

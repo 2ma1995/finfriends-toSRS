@@ -139,7 +139,7 @@ PRD의 **결정은 확정**이지만 **기준선은 실측 전**입니다. SRS�
 - [x] **분석 문서 2건** — 추출 방법론 적합성 · 축약 가능성 검토
 - [x] **기획 심화** — 서비스 예시 페이지 · 랜딩 페이지 · 퍼널 전략 문서
 - [x] **AI 개발 하네스** — 제약 기반 규칙 + 스킬 12종 + 서브에이전트 4종
-- [x] **로컬 시각 프로토타입** — Grill Ledger 12/12 · 화면 3종 × 상태 6종 · 스크린샷 13장
+- [x] **로컬 시각 프로토타입** — Grill Ledger 15/15 · **라우트 13건 · 듀얼 테마** · 스크린샷 15장
 - [x] **`/goal` 자율 실행** — 기계 게이트 6종 + 5축 앵커 · `STOP REASON: EVAL_GO`
 - [ ] 미해소 3건(D-01 · D-02 · D-03) 처리
 
@@ -502,7 +502,7 @@ SRS §1.4의 **인용 금지 10항목**을 그대로 적용했습니다. 마케�
 
 ### 착수 전에 결정한 것 — Grill Ledger
 
-`docs/grill/GRILL_LEDGER.md` 에 **토픽 12건**을 세워 전부 해소했습니다(12/12 · CLOSED).
+`docs/grill/GRILL_LEDGER.md` 에 **토픽 15건**을 세워 전부 해소했습니다(15/15 · CLOSED).
 결정 없이 착수하면 에이전트가 매번 다른 화면을 만듭니다.
 
 | 토픽 | 결정 |
@@ -515,6 +515,9 @@ SRS §1.4의 **인용 금지 10항목**을 그대로 적용했습니다. 마케�
 | T10 아바타 | **D4 미결** — 아동 홈 화면을 범위에서 제외 |
 | T11 토큰 누락 | `.tsx` 색상 리터럴 5건을 토큰으로 승격 |
 | T12 첫 달 나무 | 첫 달 전용 슬롯 — 정상 상태를 재사용하면 화면끼리 말이 어긋난다 |
+| T13 라우트 전환 | 화면 모형 → **라우트 13건 앱**. 나무는 우리 SRS대로 **보호자** 소유 |
+| T14 듀얼 테마 | 같은 토큰 이름, 다른 값. 넘김색은 두 모드 모두 테라코타 |
+| T15 아바타 | D4 미결을 **이모지로 우회**하고 화면에 「예시」를 적는다 |
 
 미결 사양(D4 · D6)을 **확정하지 않고 회피**한 것이 요점입니다. 지금 정하면 나중에 다시 만듭니다.
 
@@ -526,38 +529,67 @@ SRS §1.4의 **인용 금지 10항목**을 그대로 적용했습니다. 마케�
 | 하네스 규칙 | `.agents/skills/401-prototype-visual-rules/SKILL.md` |
 | 범위 | `docs/plan-docs/prototype-local-scope.md` · `prototype-suggestion.md` |
 
-### 앱
+### 라우트 13건
+
+한 페이지에 화면을 나란히 놓는 모형이 아니라 **실제로 이동하는 앱**입니다.
+동선이 없으면 인터뷰에서 *"아이가 어디서 출발해 어디로 가나"* 를 물어볼 수 없습니다.
+
+| 보호자 · Clean | 아이 · Fun |
+| --- | --- |
+| `/consent` 동의 게이트 | `/child/home` 내 방 |
+| `/parent/onboarding` 시작하기 5단계 | `/child/learn` 배우기 |
+| **`/parent/tree` 성장 나무** | `/child/quiz/[topic]` 퀴즈 |
+| **`/parent/forest` 월간 숲** | `/child/plan/new` 계획 카드 적기 |
+| `/parent/missions` 승인 대기 | **`/child/retro/[recordId]` 계획 ↔ 실제** |
+| `/parent/spending` 소비 내역 | `/child/wishlist` 갖고 싶은 것 |
+| | `/child/stars` 내 별 |
+
+색인 `/` 은 프로토타입 전용입니다. 본 개발에서 지웁니다.
+
+### 두 모드가 같은 토큰 이름을 다른 값으로 갖습니다
+
+컴포넌트는 **자기가 어느 모드인지 모릅니다.** `data-mode` 를 다는 곳은 `ModeFrame` 하나뿐이고,
+세그먼트 레이아웃이 그것을 부릅니다.
+
+| | Fun — 아이 | Clean — 보호자 |
+| --- | --- | --- |
+| 본문 | **18px** | 15px |
+| 모서리 | **20px** | 13px |
+| 모션 | 별이 튄다 | **페이드만** |
+| 캔버스 | `#FFF9F0` | `#FAF7F1` |
+
+🔴 **`--ff-miss`(넘김·정체)는 두 모드가 같은 테라코타입니다.** 보호자 모드라고 빨강으로 바꾸지
+않습니다 — 그 순간 조정 사실이 잘못으로 읽힙니다(P-03).
 
 ```
-app/                          Next.js 16 · React 19 · Tailwind v4 · shadcn(base-nova)
-  src/mocks/types.ts          픽스처 타입 — 중립판 §6.2 열거형에서 도출
-  src/mocks/fixtures.ts       상태 6종 실제 값 — 서연 · 3월 · 다이소 성수점
-  src/components/proto/       phone-frame · fixture-switcher · screens
-  src/app/page.tsx            화면 3종을 한 화면에 · 촬영 모드 `?shot=p1`
+app/                              Next.js 16 · React 19 · Tailwind v4 · shadcn(base-nova)
+  src/app/globals.css             듀얼 테마 토큰 26종 × 2모드 + @theme inline
+  src/app/{parent,child,consent}/ 라우트 13건 + 세그먼트 레이아웃
+  src/app/**/*.fixture.ts         목은 화면 옆에 · 첫 줄 PROTO-DATA: 가 교체 대상 태스크
+  src/components/{shared,parent,child}/
 ```
 
 ```bash
-cd app && npm install && npm run dev     # http://localhost:3000/?fixture=stall
+cd app && npm install && npm run dev     # http://localhost:3000
 ```
 
-**목은 지울 것입니다.** 각 뷰의 교체 대상을 `fixtures.ts` 머리에 적어 뒀습니다 —
-`tree → GRW-002 · GRW-001` / `review → PLN-003 · PLN-002` / `forest → GRW-004`.
+**목은 지울 것입니다.** `grep -rl 'PROTO-DATA:' app/src/app` 한 번이면 교체 지점이 전수 나옵니다.
 
 ### 상태 스크린샷
 
-`reports/proto/` 에 **화면별 10장 + 전경 3장**. 손으로 찍지 않습니다.
+`reports/proto/` 에 **15장**. 손으로 찍지 않습니다.
 
 ```bash
 cd app && npm run build && npx next start -p 4312 &
 tools/shoot_proto.sh
 ```
 
-| 상태 | 화면이 말하는 것 |
+| 화면 | 무엇을 말하는가 |
 | --- | --- |
-| **정체 14일** | *"이건 아이 문제가 아니에요 · 조건 하나가 남았을 뿐입니다"* — 미충족 조건 **전부**, 가장 적게 남은 것 최상단(ACE-3.1) |
-| **계획 넘김** | ⭐ 미지급이되 **차감하지 않는다**(P-03) · 색은 테라코타이고 **경고색이 아니다** |
-| **실천 0건** | 흰 화면을 만들지 않는다 · *"첫 실천 하나면 나무가 움직입니다"*(ACE-1.1) |
-| **첫 달** | 델타를 **0으로 그리지 않는다** · *"다음 달부터 비교할 수 있어요"*(ACE-1.2) |
+| `parent-tree.png` | *"이건 아이 문제가 아니에요 · 조건 하나가 남았을 뿐입니다"* — 미충족 조건 **전부**, 가장 적게 남은 것 최상단(ACE-3.1) |
+| `child-retro-over.png` | ⭐ 미지급이되 **차감하지 않는다**(P-03) · 색은 테라코타이고 **경고색이 아니다** |
+| `child-home.png` | 아바타는 **D4 미결**이라 이모지로 세우고 화면에 「예시」를 적었다 |
+| `child-stars.png` | *"별은 옷장에서만 쓸 수 있어요"* — **별↔현금 전환 경로 없음**(허용 오차 0) |
 
 ### 완료 판정을 두 겹으로 두었습니다
 
@@ -596,10 +628,11 @@ INF-001 · UX-001 · UX-002 · UX-004 · MCK-001 등에서 **시각 확인에 �
 | `tools/analyze_tasks.py` | 분석 문서의 **근거 수치 재현** — 단계 분포 · 병합 후보 · 블로커 |
 | `tools/gh_import.py` | GitHub 라벨 · 이슈 · 프로젝트 임포트 |
 | `tools/make_task_template.py` | GitHub 이슈 템플릿 생성 |
-| `tools/shoot_proto.sh` | 프로토타입 **상태 스크린샷 13장** 촬영 (헤드리스 크롬) |
+| `tools/shoot_proto.sh` | 프로토타입 **라우트 스크린샷 15장** 촬영 (헤드리스 크롬) |
 | `tools/trim_shots.py` | 스크린샷 하단 여백 정리 — `shoot_proto.sh` 가 호출 |
 | `tools/verify_tokens.py` | **색상 리터럴 0건 + 정의되지 않은 토큰 0종** 검사 (INF-002 AC1) |
-| `tools/verify_proto_copy.py` | 명세 §3.2 **확정 문구 ↔ 픽스처** 대조 — 목이 새는지 본다 |
+| `tools/verify_proto_copy.py` | 명세 §3.2 **확정 문구 ↔ fixture** 대조 — 목이 새는지 본다 |
+| `tools/verify_proto_structure.py` | 라우트 수 · `PROTO-DATA:` 마커 · **두 모드 토큰 대칭** 검사 |
 | `tools/split_goal_prompt.py` | `/goal` 규범 원본에서 **프롬프트 본문만 분리** — 실행 기록 생성 |
 
 ```bash
@@ -612,7 +645,8 @@ python3 tools/verify_mermaid.py    # 다이어그램 검사 페이지 생성
 python3 tools/verify_links.py      # 경로 참조 검사
 python3 tools/analyze_tasks.py     # 분석 문서 근거 수치
 python3 tools/verify_tokens.py     # 디자인 토큰 검사
-python3 tools/verify_proto_copy.py # 상태 문구 대조
+python3 tools/verify_proto_copy.py # 확정 문구 대조
+python3 tools/verify_proto_structure.py # 라우트·마커·토큰 대칭
 tools/shoot_proto.sh               # 프로토타입 스크린샷 (app 프로덕션 서버 필요)
 ```
 

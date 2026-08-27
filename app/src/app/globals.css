@@ -132,37 +132,151 @@
    UX-001 디자인 토큰 — 명세 §4
    아트보드(2차프로젝트/프로토타입/)에서 추출한 값. 라이트 전용.
    ───────────────────────────────────────────────────────────── */
+
+/* ────────────────────────────────────────────────────────────────
+   핀프렌즈 듀얼 테마 토큰 — 명세 §4
+   근거: UX-001 · UX-003(아동 Fun) · UX-002(보호자 Clean)
+
+   두 모드가 **같은 토큰 이름을 다른 값으로** 갖는다.
+   컴포넌트는 자기가 어느 모드인지 알지 못한다 — 조상 [data-mode] 가 정한다.
+   ──────────────────────────────────────────────────────────────── */
+
+/* 모드 무관 원시값 */
 :root {
-  --ff-bg: #FAF7F1;
-  --ff-bg-2: #F3EFE7;
-  --ff-paper: #FFFFFF;
-  --ff-ink: #2A2724;
-  --ff-ink-2: #57524B;
-  --ff-ink-3: #8B837A;
-  --ff-line: #E5DFD5;
-  --ff-line-2: #D6CEC1;
-  --ff-green: #4F7A4A;
-  --ff-green-d: #3E6B3A;
-  --ff-green-l: #8FB07F;
-  --ff-green-p: #C6D0BE;
-  --ff-green-bg: #E8F0E4;
-  --ff-clay: #B36B3A;        /* 넘김 · 정체 — 경고색이 아니다 */
-  --ff-clay-bg: #F7EEE6;
-  --ff-clay-line: #E5CDB8;   /* 넘김 · 정체 블록의 테두리 */
-  --ff-sand: #F0E6D2;
-  --ff-gold: #E8B978;        /* 별 카드 테두리 */
-  --ff-gold-d: #B8862F;      /* 별 숫자 */
-  --ff-gold-bg: #FDF6E8;     /* 별 카드 그러데이션 위 */
-  --ff-gold-bg-2: #F7EAD2;   /* 별 카드 그러데이션 아래 */
-  /* next/font 를 쓰지 않는다 — 한글 웹폰트 용량이 로컬 확인을 느리게 만든다 */
+  --ff-frame: 390px;   /* 모바일 폭 1종 — 명세 §7.2 */
+  --ff-touch: 44px;    /* 아동 터치 타깃 하한 */
   --ff-sans: 'Apple SD Gothic Neo', 'Pretendard', 'Malgun Gothic', sans-serif;
   --ff-serif: 'AppleMyungjo', 'Nanum Myeongjo', 'Batang', serif;
 }
-html, body {
-  background: var(--ff-bg-2);
-  color: var(--ff-ink);
+
+/* Clean — 보호자. 증거 제시 · 판단 지원. 명세 §4의 값이 그대로 여기다 */
+[data-mode="clean"] {
+  --ff-canvas: #FAF7F1;
+  --ff-surface: #FFFFFF;
+  --ff-primary: #4F7A4A;
+  --ff-primary-d: #3E6B3A;
+  --ff-primary-l: #8FB07F;
+  --ff-primary-bg: #E8F0E4;
+  --ff-ink: #2A2724;
+  --ff-ink-soft: #57524B;
+  --ff-ink-mute: #8B837A;
+  --ff-line: #E5DFD5;
+  --ff-line-2: #D6CEC1;
+  /* 🔴 넘김·정체는 테라코타다. 두 모드 모두 경고색을 쓰지 않는다 (P-03 · 스킬 401) */
+  --ff-miss: #B36B3A;
+  --ff-miss-bg: #F7EEE6;
+  --ff-miss-line: #E5CDB8;
+  --ff-sand: #F0E6D2;
+  --ff-star: #E8B978;
+  --ff-star-d: #B8862F;
+  --ff-star-bg: #FDF6E8;
+  --ff-star-bg-2: #F7EAD2;
+  --ff-star-glow: transparent;
+  --ff-radius: 13px;
+  --ff-text-body: 15px;
+  --ff-text-title: 20px;
+  --ff-space: 14px;
+  --ff-motion: 150ms ease;
+  /* Clean 은 페이드만. 스케일·바운스 금지 — 컴포넌트를 고치지 않고 토큰으로 가른다 */
+  --ff-star-anim: ff-fade-in;
+}
+
+/* Fun — 아동. 재미 · 즉각 보상 · 큰 글씨 */
+[data-mode="fun"] {
+  --ff-canvas: #FFF9F0;
+  --ff-surface: #FFFFFF;
+  --ff-primary: #5C9152;
+  --ff-primary-d: #477540;
+  --ff-primary-l: #A6C795;
+  --ff-primary-bg: #EDF5E8;
+  --ff-ink: #2B2118;
+  --ff-ink-soft: #6B5C4D;
+  --ff-ink-mute: #9C8E80;
+  --ff-line: #EFE4D4;
+  --ff-line-2: #E0D2BC;
+  --ff-miss: #B36B3A;
+  --ff-miss-bg: #FDF0E5;
+  --ff-miss-line: #EED6BE;
+  --ff-sand: #FBEFDA;
+  --ff-star: #FFC53D;
+  --ff-star-d: #C88A12;
+  --ff-star-bg: #FFF7E2;
+  --ff-star-bg-2: #FFEDC2;
+  --ff-star-glow: #FFE9A8;
+  --ff-radius: 20px;
+  --ff-text-body: 18px;
+  --ff-text-title: 26px;
+  --ff-space: 20px;
+  --ff-motion: 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ff-star-anim: ff-star-pop;
+}
+
+/* 토큰 → Tailwind 유틸리티. inline 이라 [data-mode] 가 바뀌면 유틸리티도 따라 바뀐다 */
+@theme inline {
+  --color-canvas: var(--ff-canvas);
+  --color-surface: var(--ff-surface);
+  --color-primary: var(--ff-primary);
+  --color-primary-d: var(--ff-primary-d);
+  --color-primary-l: var(--ff-primary-l);
+  --color-primary-bg: var(--ff-primary-bg);
+  --color-ink: var(--ff-ink);
+  --color-ink-soft: var(--ff-ink-soft);
+  --color-ink-mute: var(--ff-ink-mute);
+  --color-line: var(--ff-line);
+  --color-line-2: var(--ff-line-2);
+  --color-miss: var(--ff-miss);
+  --color-miss-bg: var(--ff-miss-bg);
+  --color-miss-line: var(--ff-miss-line);
+  --color-sand: var(--ff-sand);
+  --color-star: var(--ff-star);
+  --color-star-d: var(--ff-star-d);
+  --color-star-bg: var(--ff-star-bg);
+  --color-star-bg-2: var(--ff-star-bg-2);
+
+  --radius-card: var(--ff-radius);
+  --text-body: var(--ff-text-body);
+  --text-title: var(--ff-text-title);
+
+  --spacing-gap: var(--ff-space);
+  --spacing-frame: var(--ff-frame);
+  --spacing-touch: var(--ff-touch);
+}
+
+@custom-variant fun (&:where([data-mode="fun"], [data-mode="fun"] *));
+@custom-variant clean (&:where([data-mode="clean"], [data-mode="clean"] *));
+
+html, body { height: 100%; }
+
+body {
+  /* 모드 밖 영역. 각 세그먼트 래퍼가 canvas 로 덮는다 */
+  background: #ECE8E1;
   font-family: var(--ff-sans);
   word-break: keep-all;
   -webkit-font-smoothing: antialiased;
 }
+
 .ff-serif { font-family: var(--ff-serif); }
+
+/* ────────────────────────────────────────────────────────────────
+   모션 — CSS 전용. Lottie·GSAP 을 설치하지 않는다.
+   로컬 최소안 §2 「L5에서 Lottie는 정적 이미지로 대체」
+   ──────────────────────────────────────────────────────────────── */
+
+@keyframes ff-star-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ff-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* 어느 모드인지 컴포넌트는 알지 못한다. 토큰이 어떤 키프레임을 쓸지 정한다 */
+.ff-star-earn { animation: var(--ff-star-anim) var(--ff-motion); }
+.ff-fade      { animation: ff-fade-in var(--ff-motion); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ff-star-earn, .ff-fade { animation: none; }
+}

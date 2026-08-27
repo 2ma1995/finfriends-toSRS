@@ -5,12 +5,12 @@
 **관심 방향:** 로컬 시각 프로토타입의 (1) 합의 확인 (2) 착수 전 미확정 사항 해소
 **OUTPUT:** `docs/plan-docs/[Spec]Prototype-Visual-Plan.md` (신규) + 하네스 스킬 401 + 앱 구현
 
-**상태:** ■ **CLOSED** — 세션 3 (2026-08-27) `/goal` 완료 · 12/12 결정
-**재개:** 새 질문이 생기면 새 토픽 T13부터 추가한다. RESOLVED 토픽은 다시 묻지 않는다.
+**상태:** ■ **CLOSED** — 세션 4 (2026-08-27) 라우트 앱 전환 · 15/15 결정
+**재개:** 새 질문이 생기면 새 토픽 T16부터 추가한다. RESOLVED 토픽은 다시 묻지 않는다.
 
 ```
-RESOLVED: 12 / TOTAL: 12
-CORE: 7
+RESOLVED: 15 / TOTAL: 15
+CORE: 10
 MINOR: 5
 - [x] T1 | CORE  | 확인할 화면 상태 목록 | status:RESOLVED | decision:상태 6종(정상·실천0건·정체14일·첫달·계획넘김·승인대기) · 화면 3종(나무·대조·숲) | applied:[Spec]…§1
 - [x] T2 | CORE  | 화면별 정보 구조 — 슬롯 순서와 필수 항목 | depends:T1 | status:RESOLVED | decision:슬롯 순서를 화면 3종 모두 고정 — 나무 5슬롯(①헤더 ②4영역 2×2 ③정체 원인 ④승인 대기 ⑤실천 근거) · 대조 5슬롯 · 숲 4슬롯 | applied:[Spec]…§2 · app/src/components/proto/screens.tsx
@@ -24,6 +24,9 @@ MINOR: 5
 - [x] T10| MINOR | 아바타 에셋 부재 (D4 미결 사양) | status:RESOLVED | decision:아동 홈 화면을 범위에서 제외 — 지금 만들면 D4 확정 후 다시 만든다 | applied:prototype-local-scope.md §9
 - [x] T11| CORE  | 명세 §4에 없는 색 4종이 코드에 하드코딩됨 | status:RESOLVED | decision:토큰으로 승격 — `--ff-clay-line` `--ff-gold-d` `--ff-gold-bg` `--ff-gold-bg-2`. 명세 §4 표에 추가해 단일 원천을 되돌린다 | applied:[Spec]…§4 · app/src/app/globals.css · screens.tsx
 - [x] T12| CORE  | 첫 달(F4)의 나무가 정상(F1)과 같은 슬롯을 씀 | status:RESOLVED | decision:첫 달 전용 슬롯을 만든다 — 벌기 새싹 55% · 잘 쓰기 씨앗 30% · 모으기 씨앗 15%. 숲의 「별 12개 · 첫 달」과 앞뒤가 맞아야 한다 | applied:[Spec]…§6.2.1 · app/src/mocks/fixtures.ts · reports/proto/p1-first.png
+- [x] T13| CORE  | 화면 모형(한 페이지 3화면 + 상태 드롭다운)이 동선을 못 보여준다 | status:RESOLVED | decision:라우트 13건 앱으로 전환 — /consent · /parent/{onboarding,tree,forest,missions,spending} · /child/{home,learn,quiz/[topic],plan/new,retro/[recordId],wishlist,stars}. 나무는 우리 SRS대로 보호자 소유(UX-002 · GRW-003) | applied:[Spec]…§1.1 · app/src/app/**
+- [x] T14| CORE  | 아동 화면과 보호자 화면의 톤이 갈릴 자리가 없다 | status:RESOLVED | decision:듀얼 테마 — 같은 토큰 이름을 다른 값으로. data-mode 는 ModeFrame 하나만 단다. --ff-miss(테라코타)는 두 모드가 같다 — 보호자라고 빨강으로 바꾸지 않는다 | applied:[Spec]…§4.2 · app/src/app/globals.css
+- [x] T15| CORE  | 아바타 에셋 부재(D4)로 아동 홈을 계속 미룰 수 없다 | status:RESOLVED | decision:이모지 조합으로 세우고 화면에 「예시」를 적는다. D4는 여전히 미결이며 Avatar.tsx 만 갈아끼우면 된다. T10(범위 제외)을 이 결정이 대체한다 | applied:app/src/components/child/Avatar.tsx · [Spec]…§1.3
 ```
 
 ---
@@ -147,3 +150,23 @@ MINOR: 5
 **세는 게이트는 세는 것만 막는다.**
 
 STOP REASON: EVAL_GO
+
+---
+
+## 세션 4 — 라우트 앱 전환 (2026-08-27)
+
+팀 다른 저장소(`hayoungv/finfriends-prd-to-srs` `feat/proto-shell`)의 라우트 구조를 보고
+**화면 모형을 앱으로 바꿨다.** 무엇을 가져오고 무엇을 우리 것으로 남겼는지:
+
+| | 가져온 것 | 우리 것으로 남긴 것 |
+| --- | --- | --- |
+| 구조 | 라우트 13건 · 세그먼트 레이아웃 | 라우트 **구성**은 우리 태스크에서 뽑았다 |
+| 테마 | `data-mode` 듀얼 테마 · `@theme inline` | 값은 명세 §4의 우리 팔레트 |
+| 목 | co-located `*.fixture.ts` · `PROTO-DATA:` 마커 | 교체 대상은 우리 태스크 ID |
+| 나무 소유 | — | **보호자**(UX-002 · GRW-003). 팀원 저장소는 아이 소유다 |
+| 경고색 | — | **`--ff-miss` 는 두 모드 모두 테라코타.** 팀원 저장소는 clean 에서 빨강을 쓴다 |
+
+**나무 소유가 갈린 것은 실수가 아니다.** 우리 SRS는 *"보호자가 여는 첫 화면"* 으로 확정했고
+원장 T1이 그것을 따랐다. 팀에서 하나로 모을 때 **어느 쪽이 맞는지 정해야 할 항목**이다.
+
+STOP REASON: ROUTE_APP_DONE

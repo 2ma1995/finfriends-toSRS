@@ -22,36 +22,35 @@ curl -sf -o /dev/null "http://localhost:$PORT/" || { echo "서버가 없다: loc
 mkdir -p "$OUT" "$TMP"
 trap 'rm -rf "$TMP"' EXIT
 
-# shoot <파일명> <screen> <fixture> <폭>
+# shoot <파일명> <경로> <폭>
 shoot() {
-  local png="$OUT/$1.png" url="http://localhost:$PORT/?fixture=$3&shot=$2" prof="$TMP/$1"
-  [[ "$2" == "all" ]] && url="http://localhost:$PORT/?fixture=$3"
+  local png="$OUT/$1.png" url="http://localhost:$PORT$2" prof="$TMP/$1"
   rm -f "$png"
   "$CH" --headless --disable-gpu --hide-scrollbars --no-first-run --no-default-browser-check \
         --user-data-dir="$prof" --virtual-time-budget=2500 --force-device-scale-factor=2 \
-        --window-size=$4,1500 --screenshot="$png" "$url" >/dev/null 2>&1 &
+        --window-size=$3,1600 --screenshot="$png" "$url" >/dev/null 2>&1 &
   local pid=$!
   for i in $(seq 1 30); do sleep 1; [[ -s "$png" ]] && break; done
   sleep 1; kill $pid 2>/dev/null || true; wait $pid 2>/dev/null || true
   printf '  %s\n' "$1.png"
 }
 
-echo "화면별 10장"
-shoot p1-normal  p1 normal  452
-shoot p1-empty   p1 empty   452
-shoot p1-stall   p1 stall   452
-shoot p1-pending p1 pending 452
-shoot p1-first   p1 first   452
-shoot p2-normal  p2 normal  452
-shoot p2-over    p2 over    452
-shoot p2-empty   p2 empty   452
-shoot p3-normal  p3 normal  452
-shoot p3-first   p3 first   452
-
-echo "전경 3장"
-shoot overview-normal all normal 1340
-shoot overview-stall  all stall  1340
-shoot overview-over   all over   1340
+echo "라우트 13건 + 색인"
+shoot index            /                        1100
+shoot consent          /consent                  452
+shoot parent-onboarding /parent/onboarding       452
+shoot parent-tree      /parent/tree              452
+shoot parent-forest    /parent/forest            452
+shoot parent-missions  /parent/missions          452
+shoot parent-spending  /parent/spending          452
+shoot child-home       /child/home               452
+shoot child-learn      /child/learn              452
+shoot child-quiz       /child/quiz/spend         452
+shoot child-plan-new   /child/plan/new           452
+shoot child-retro-met  /child/retro/r-201        452
+shoot child-retro-over /child/retro/r-202        452
+shoot child-wishlist   /child/wishlist           452
+shoot child-stars      /child/stars              452
 
 echo "하단 여백 정리"
 python3 "$ROOT/tools/trim_shots.py" "$OUT"

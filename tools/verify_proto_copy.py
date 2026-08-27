@@ -13,8 +13,8 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SPEC = ROOT / "docs" / "plan-docs" / "[Spec]Prototype-Visual-Plan.md"
-FIXTURES = ROOT / "app" / "src" / "mocks" / "fixtures.ts"
-SECTION = re.compile(r"### 3\.2 상태 문구.*?\n(\|.*?)\n\n", re.S)
+APP = ROOT / "app" / "src" / "app"
+SECTION = re.compile(r"### 3\.2 확정 문구.*?\n(\|.*?)\n\n", re.S)
 PLACEHOLDER = re.compile(r"N원|「[^」]*」")   # 금액·토픽 자리표시자
 
 
@@ -26,7 +26,7 @@ def phrases_from_spec(text):
     out = []
     for line in m.group(1).splitlines():
         cells = [c.strip() for c in line.split("|")[1:-1]]
-        if len(cells) < 3 or cells[0].startswith((":", "-")) or cells[0] == "상태":
+        if len(cells) < 3 or cells[0].startswith((":", "-")) or cells[0] == "화면":
             continue
         label = f"{cells[0]}·{cells[1]}"
         raw = cells[2].replace("**", "").replace("→", "/")
@@ -43,8 +43,8 @@ def phrases_from_spec(text):
 
 
 def main():
-    if not SPEC.exists() or not FIXTURES.exists():
-        print("명세 또는 픽스처 파일이 없다")
+    if not SPEC.exists() or not APP.exists():
+        print("명세 또는 앱 디렉터리가 없다")
         return 1
 
     items = phrases_from_spec(SPEC.read_text())
@@ -52,18 +52,18 @@ def main():
         print("명세에서 `### 3.2 상태 문구` 표를 찾지 못했다")
         return 1
 
-    src = FIXTURES.read_text()
+    src = "\n".join(f.read_text() for f in sorted(APP.rglob("*.fixture.ts")))
     missing = [(k, p) for k, p in items if p not in src]
 
     print(f"명세 §3.2 확정 문구 {len(items)}조각 대조")
     if missing:
-        print(f"  ❌ 픽스처에 없는 문구 {len(missing)}건 — 화면 컴포넌트에 박혀 있지 않은지 본다")
+        print(f"  ❌ fixture 에 없는 문구 {len(missing)}건 — 화면 컴포넌트에 박혀 있지 않은지 본다")
         for k, p in missing:
             print(f"     {k}  「{p}」")
         print("실패")
         return 1
 
-    print("  ✅ 전건 일치 — 상태 문구가 전부 src/mocks/ 안에 있다")
+    print("  ✅ 전건 일치 — 확정 문구가 전부 *.fixture.ts 안에 있다")
     print("전부 통과")
     return 0
 
