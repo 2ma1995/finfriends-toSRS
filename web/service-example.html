@@ -209,6 +209,13 @@ function trees(mod){
   const t = JSON.parse(JSON.stringify(TREE));
   if (mod === "empty") { for (const k in t){ t[k].ic="🌱"; t[k].st="씨앗"; t[k].pct=0; t[k].cond="아직 기록이 없어요"; } }
   if (mod === "stall") { t.spend.cond="<b>실천 1회 남음</b> · 학습·퀴즈 충족"; }
+  // 첫 달은 정상 상태를 재사용하지 않는다 — 재사용하면 가입 첫 달인데 벌기가 100%가 되고,
+  // 같은 화면 오른쪽 숲의 「첫 달 · 별 12개」와 앞뒤가 맞지 않는다. 명세 §6.2.1
+  if (mod === "first") {
+    t.earn.ic="🌿"; t.earn.st="새싹"; t.earn.pct=55; t.earn.cond="학습 2 · 퀴즈 3 · 실천 2";
+    t.spend.ic="🌱"; t.spend.st="씨앗"; t.spend.pct=30; t.spend.cond="학습 1 · 퀴즈 2 · 실천 1";
+    t.save.ic="🌱";  t.save.st="씨앗";  t.save.pct=15; t.save.cond="학습 1 · 퀴즈 1 · 실천 0";
+  }
   return `<div class="trees">${Object.entries(t).map(([k,o])=>treeCard(k,o,mod==="stall"&&k==="spend")).join("")}</div>`;
 }
 const V = {
@@ -266,7 +273,7 @@ const V = {
     ftitle:"2026년 3월 숲"
   },
   first:{
-    tree: trees()+`<div class="evidence"><h4>이번 달 달라진 것</h4>
+    tree: trees("first")+`<div class="evidence"><h4>이번 달 달라진 것</h4>
       <p>첫 달이라 비교할 지난달이 없어요.<br>이번 달 기록이 다음 달의 기준이 됩니다.</p></div>`,
     tsub:"서연 · 3월 · 가입 첫 달",
     retro:`<div class="cmp">
@@ -336,7 +343,8 @@ function render(k){
   $("f-body").innerHTML = v.forest; $("f-title").textContent = v.ftitle;
 }
 $("sc").addEventListener("change", (e) => render(e.target.value));
-render("normal");
+// 첫 렌더도 드롭다운을 읽는다 — 하드코딩하면 선택값과 화면이 어긋난다
+render($("sc").value);
 </script>
 </body>
 </html>
