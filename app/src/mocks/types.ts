@@ -91,6 +91,8 @@ export interface ForestView {
   deltas: DeltaItem[];
   /** 첫 달 — 델타를 0으로 그리지 않는다 (ACE-1.2) */
   noPrevMonth: boolean;
+  /** 첫 달에 델타 자리를 대신할 문구. 명세 §3.2 F4·P3 확정 전문 */
+  noPrevNotice: { title: string; body: string } | null;
   emptyNotice: { title: string; body: string } | null;
 }
 

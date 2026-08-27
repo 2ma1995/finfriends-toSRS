@@ -16,7 +16,7 @@ export function TreeScreen({ v }: { v: TreeView }) {
         {v.slots.map((s) => (
           <div key={s.topic} className="rounded-[13px] border px-[11px] py-3 text-center"
                style={{ background: s.stalled ? "var(--ff-clay-bg)" : "var(--ff-paper)",
-                        borderColor: s.stalled ? "#E5CDB8" : "var(--ff-line)" }}>
+                        borderColor: s.stalled ? "var(--ff-clay-line)" : "var(--ff-line)" }}>
             <div className="text-[1.75rem] leading-[1.1]">{s.icon}</div>
             <div className="mt-[5px] text-[0.79rem] font-bold">{s.name}</div>
             <div className="text-[0.68rem]" style={{ color: "var(--ff-ink-3)" }}>{s.stageLabel}</div>
@@ -34,7 +34,7 @@ export function TreeScreen({ v }: { v: TreeView }) {
       {/* ③ 정체 원인 — 조건부. 전부 표시하고 가장 적게 남은 것이 최상단 */}
       {v.stall ? (
         <div className="mt-[9px] rounded-[11px] border px-3 py-[11px]"
-             style={{ background: "var(--ff-clay-bg)", borderColor: "#E5CDB8" }}>
+             style={{ background: "var(--ff-clay-bg)", borderColor: "var(--ff-clay-line)" }}>
           <h4 className="mb-[5px] text-[0.72rem] font-bold" style={{ color: "var(--ff-clay)" }}>
             🛑 {v.stall.topic}
           </h4>
@@ -110,7 +110,7 @@ export function ReviewScreen({ v }: { v: ReviewView }) {
           {/* ③④ 회고 문장 + ⭐ — 넘김에도 문장은 똑같이 제시한다 */}
           <div className="mt-[11px] rounded-[13px] border p-[14px]"
                style={{ background: met ? "var(--ff-green-bg)" : "var(--ff-clay-bg)",
-                        borderColor: met ? "var(--ff-green-p)" : "#E5CDB8" }}>
+                        borderColor: met ? "var(--ff-green-p)" : "var(--ff-clay-line)" }}>
             <p className="ff-serif mb-[10px] text-[1rem] leading-[1.6]">
               {v.retroLines.map((l) => <span key={l} className="block">{l}</span>)}
             </p>
@@ -142,16 +142,16 @@ export function ForestScreen({ v }: { v: ForestView }) {
 
           {/* ② 획득 별 — 스크롤 없이 (AC-1.4) */}
           <div className="mt-[9px] rounded-[13px] border p-[13px] text-center"
-               style={{ background: "linear-gradient(180deg,#FDF6E8,#F7EAD2)", borderColor: "var(--ff-gold)" }}>
-            <b className="block text-[1.7rem] tabular-nums" style={{ color: "#B8862F" }}>{v.starsEarned}</b>
+               style={{ background: "linear-gradient(180deg, var(--ff-gold-bg), var(--ff-gold-bg-2))", borderColor: "var(--ff-gold)" }}>
+            <b className="block text-[1.7rem] tabular-nums" style={{ color: "var(--ff-gold-d)" }}>{v.starsEarned}</b>
             <span className="text-[0.73rem]" style={{ color: "var(--ff-ink-2)" }}>이번 달 획득 별</span>
           </div>
 
           {/* ③④ 델타 — 첫 달이면 0으로 그리지 않는다 (ACE-1.2) */}
           <div className="mt-[9px]">
             <h4 className="mb-[7px] text-[0.72rem] tracking-[0.04em]" style={{ color: "var(--ff-ink-3)" }}>지난달과 비교</h4>
-            {v.noPrevMonth ? (
-              <EmptyNotice emoji="📅" title="다음 달부터 비교할 수 있어요" body="이번 달이 첫 기준이 됩니다" />
+            {v.noPrevMonth && v.noPrevNotice ? (
+              <EmptyNotice emoji="📅" {...v.noPrevNotice} />
             ) : v.deltas.map((d) => (
               <div key={d.label} className="mb-[5px] flex items-center justify-between rounded-[9px] border px-[11px] py-[7px] text-[0.79rem]"
                    style={{ background: "var(--ff-paper)", borderColor: "var(--ff-line)" }}>

@@ -36,11 +36,12 @@ shoot() {
   printf '  %s\n' "$1.png"
 }
 
-echo "화면별 9장"
+echo "화면별 10장"
 shoot p1-normal  p1 normal  452
 shoot p1-empty   p1 empty   452
 shoot p1-stall   p1 stall   452
 shoot p1-pending p1 pending 452
+shoot p1-first   p1 first   452
 shoot p2-normal  p2 normal  452
 shoot p2-over    p2 over    452
 shoot p2-empty   p2 empty   452

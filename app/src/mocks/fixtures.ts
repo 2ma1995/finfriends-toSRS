@@ -20,6 +20,17 @@ const SLOTS: TreeSlot[] = [
 const seedAll = (): TreeSlot[] =>
   SLOTS.map((s) => ({ ...s, stage: "SEED", stageLabel: "씨앗", percent: 0, condition: "아직 기록이 없어요" }));
 
+/**
+ * 첫 달 전용 슬롯 — 숲의 「별 12개 · 첫 달」과 앞뒤가 맞아야 한다.
+ * SLOTS를 그대로 쓰면 가입 첫 달인데 벌기가 이미 100%라, 같은 상태가 화면마다 다른 말을 한다.
+ */
+const FIRST_MONTH_SLOTS: TreeSlot[] = [
+  { topic: "EARN",  icon: "🌿", name: "벌기",    stage: "SPROUT", stageLabel: "새싹", percent: 55, condition: "학습 2 · 퀴즈 3 · 실천 2" },
+  { topic: "SPEND", icon: "🌱", name: "잘 쓰기", stage: "SEED",   stageLabel: "씨앗", percent: 30, condition: "학습 1 · 퀴즈 2 · 실천 1" },
+  { topic: "SAVE",  icon: "🌱", name: "모으기",  stage: "SEED",   stageLabel: "씨앗", percent: 15, condition: "학습 1 · 퀴즈 1 · 실천 0" },
+  { topic: "GROW",  icon: "🌱", name: "불리기",  stage: "SEED",   stageLabel: "씨앗", percent: 0,  condition: "곧 열려요" },
+];
+
 const PLANNED = [{ icon: "🖊", label: "문구", amount: 5000 }];
 
 export const FIXTURES: Record<FixtureKey, Fixture> = {
@@ -48,7 +59,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
         { label: "벌기",       from: "새싹", to: "나무", improved: true },
         { label: "잘 쓰기",    from: "씨앗", to: "새싹", improved: true },
       ],
-      noPrevMonth: false, emptyNotice: null,
+      noPrevMonth: false, noPrevNotice: null, emptyNotice: null,
     },
   },
 
@@ -66,7 +77,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
       emptyNotice: { title: "아직 적어둔 계획이 없어요", body: "가기 전에 적으면 쓴 뒤에 맞춰볼 수 있어요", hint: "다음엔 가기 전에 적어볼까요?" },
     },
     forest: {
-      title: "2026년 3월 숲", oneLine: "", starsEarned: 0, deltas: [], noPrevMonth: false,
+      title: "2026년 3월 숲", oneLine: "", starsEarned: 0, deltas: [], noPrevMonth: false, noPrevNotice: null,
       emptyNotice: { title: "이번 달 기록을 모으는 중이에요", body: "월말에 한 화면으로 정리해 드릴게요" },
     },
   },
@@ -95,7 +106,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
         { label: "가격 비교",   from: "0회", to: "0회", improved: false },
         { label: "저축률",     from: "12%", to: "15%", improved: true },
       ],
-      noPrevMonth: false, emptyNotice: null,
+      noPrevMonth: false, noPrevNotice: null, emptyNotice: null,
     },
   },
 
@@ -104,7 +115,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
     key: "first",
     label: "첫 달 — 전월 데이터 없음",
     tree: {
-      childName: "서연", cycleLabel: "3월 · 가입 첫 달", slots: SLOTS,
+      childName: "서연", cycleLabel: "3월 · 가입 첫 달", slots: FIRST_MONTH_SLOTS,
       evidence: { title: "이번 달 달라진 것", lines: ["첫 달이라 비교할 지난달이 없어요.", "이번 달 기록이 다음 달의 기준이 됩니다."] },
       emptyNotice: null, stall: null, pendingCount: 0,
     },
@@ -118,7 +129,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
     },
     forest: {
       title: "2026년 3월 숲 · 첫 달", oneLine: "첫 달 기록이 쌓이고 있습니다", starsEarned: 12,
-      deltas: [], noPrevMonth: true, emptyNotice: null,
+      deltas: [], noPrevMonth: true, noPrevNotice: { title: "다음 달부터 비교할 수 있어요", body: "이번 달이 첫 기준이 됩니다" }, emptyNotice: null,
     },
   },
 
@@ -148,7 +159,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
         { label: "계획 지킨 날", from: "5일", to: "4일", improved: false },
         { label: "저축률",       from: "12%", to: "18%", improved: true },
       ],
-      noPrevMonth: false, emptyNotice: null,
+      noPrevMonth: false, noPrevNotice: null, emptyNotice: null,
     },
   },
 
@@ -176,7 +187,7 @@ export const FIXTURES: Record<FixtureKey, Fixture> = {
         { label: "미션 완료",   from: "5회", to: "8회", improved: true },
         { label: "승인 대기",   from: "0건", to: "3건", improved: false },
       ],
-      noPrevMonth: false, emptyNotice: null,
+      noPrevMonth: false, noPrevNotice: null, emptyNotice: null,
     },
   },
 };

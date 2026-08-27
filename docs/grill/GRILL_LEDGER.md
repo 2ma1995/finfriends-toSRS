@@ -5,12 +5,12 @@
 **관심 방향:** 로컬 시각 프로토타입의 (1) 합의 확인 (2) 착수 전 미확정 사항 해소
 **OUTPUT:** `docs/plan-docs/[Spec]Prototype-Visual-Plan.md` (신규) + 하네스 스킬 401 + 앱 구현
 
-**상태:** ■ **CLOSED** — 세션 2 (2026-08-27)에 T2 · T5 해소. 10/10 결정 완료
-**재개:** 새 질문이 생기면 새 토픽 T11부터 추가한다. RESOLVED 토픽은 다시 묻지 않는다.
+**상태:** ■ **CLOSED** — 세션 3 (2026-08-27) `/goal` 완료 · 12/12 결정
+**재개:** 새 질문이 생기면 새 토픽 T13부터 추가한다. RESOLVED 토픽은 다시 묻지 않는다.
 
 ```
-RESOLVED: 10 / TOTAL: 10
-CORE: 5
+RESOLVED: 12 / TOTAL: 12
+CORE: 7
 MINOR: 5
 - [x] T1 | CORE  | 확인할 화면 상태 목록 | status:RESOLVED | decision:상태 6종(정상·실천0건·정체14일·첫달·계획넘김·승인대기) · 화면 3종(나무·대조·숲) | applied:[Spec]…§1
 - [x] T2 | CORE  | 화면별 정보 구조 — 슬롯 순서와 필수 항목 | depends:T1 | status:RESOLVED | decision:슬롯 순서를 화면 3종 모두 고정 — 나무 5슬롯(①헤더 ②4영역 2×2 ③정체 원인 ④승인 대기 ⑤실천 근거) · 대조 5슬롯 · 숲 4슬롯 | applied:[Spec]…§2 · app/src/components/proto/screens.tsx
@@ -22,6 +22,8 @@ MINOR: 5
 - [x] T8 | MINOR | 코드 위치 | status:RESOLVED | decision:같은 저장소 app/ 하위 · node_modules gitignore | applied:.gitignore · app/
 - [x] T9 | CORE  | 나무 단계 수 (D6 미결 사양) | status:RESOLVED | decision:3단계 씨앗·새싹·나무로 진행하고 화면에 「예시값」 표시 · D6은 계속 미결로 둔다 | applied:[Spec]…§2 · 화면 고지
 - [x] T10| MINOR | 아바타 에셋 부재 (D4 미결 사양) | status:RESOLVED | decision:아동 홈 화면을 범위에서 제외 — 지금 만들면 D4 확정 후 다시 만든다 | applied:prototype-local-scope.md §9
+- [x] T11| CORE  | 명세 §4에 없는 색 4종이 코드에 하드코딩됨 | status:RESOLVED | decision:토큰으로 승격 — `--ff-clay-line` `--ff-gold-d` `--ff-gold-bg` `--ff-gold-bg-2`. 명세 §4 표에 추가해 단일 원천을 되돌린다 | applied:[Spec]…§4 · app/src/app/globals.css · screens.tsx
+- [x] T12| CORE  | 첫 달(F4)의 나무가 정상(F1)과 같은 슬롯을 씀 | status:RESOLVED | decision:첫 달 전용 슬롯을 만든다 — 벌기 새싹 55% · 잘 쓰기 씨앗 30% · 모으기 씨앗 15%. 숲의 「별 12개 · 첫 달」과 앞뒤가 맞아야 한다 | applied:[Spec]…§6.2.1 · app/src/mocks/fixtures.ts · reports/proto/p1-first.png
 ```
 
 ---
@@ -126,3 +128,22 @@ MINOR: 5
 | 화면 | `app/src/components/proto/{phone-frame,fixture-switcher,screens}.tsx` |
 | 상태 스크린샷 | `reports/proto/` — 화면별 9장 + 전경 3장 |
 | 촬영 스크립트 | `tools/shoot_proto.sh` · `tools/trim_shots.py` |
+
+---
+
+## `/goal` 실행 결과 (2026-08-27 · OPS-FINFRIENDS-GOAL-001 v1.2)
+
+실행 기록: [`docs/ops-docs/goal-runs/2026-08-27T1500-proto-local-visual.md`](../ops-docs/goal-runs/2026-08-27T1500-proto-local-visual.md)
+
+| 라운드 | 걸린 것 | 조치 |
+| :-: | --- | --- |
+| R1 | 게이트 3 실패 — `.tsx` 에 색상 리터럴 5건 | 토큰 4종으로 승격 (T11) |
+| R2 | **게이트는 통과했는데 화면이 깨짐** — `globals.css` 에 토큰 정의 누락 | 정의 추가 · 게이트 3을 `verify_tokens.py` 로 교체(v1.1) |
+| R3 | 5축 NO-GO 2건 — ① §3.2 F4·P3 문구가 컴포넌트에 박힘 ② `first` 나무가 `normal` 과 동일 | 문구를 픽스처로 회수 · 첫 달 전용 슬롯 (T12) · 게이트 6 신설 · 13장(v1.2) |
+| R4 | — | 게이트 6종 통과 · 5축 전건 GO |
+
+**R2가 이 작업의 교훈이다.** 리터럴 수를 세는 게이트는 리터럴을 지우면 통과한다.
+지운 자리가 정의된 토큰인지는 아무도 보지 않았고, 별 카드 그러데이션이 사라진 채로 통과했다.
+**세는 게이트는 세는 것만 막는다.**
+
+STOP REASON: EVAL_GO
