@@ -26,7 +26,7 @@ MINOR: 5
 - [x] T12| CORE  | 첫 달(F4)의 나무가 정상(F1)과 같은 슬롯을 씀 | status:RESOLVED | decision:첫 달 전용 슬롯을 만든다 — 벌기 새싹 55% · 잘 쓰기 씨앗 30% · 모으기 씨앗 15%. 숲의 「별 12개 · 첫 달」과 앞뒤가 맞아야 한다 | applied:[Spec]…§6.2.1 · app/src/mocks/fixtures.ts · reports/proto/p1-first.png
 - [x] T13| CORE  | 화면 모형(한 페이지 3화면 + 상태 드롭다운)이 동선을 못 보여준다 | status:RESOLVED | decision:라우트 13건 앱으로 전환 — /consent · /parent/{onboarding,tree,forest,missions,spending} · /child/{home,learn,quiz/[topic],plan/new,retro/[recordId],wishlist,stars}. 나무는 우리 SRS대로 보호자 소유(UX-002 · GRW-003) | applied:[Spec]…§1.1 · app/src/app/**
 - [x] T14| CORE  | 아동 화면과 보호자 화면의 톤이 갈릴 자리가 없다 | status:RESOLVED | decision:듀얼 테마 — 같은 토큰 이름을 다른 값으로. data-mode 는 ModeFrame 하나만 단다. --ff-miss(테라코타)는 두 모드가 같다 — 보호자라고 빨강으로 바꾸지 않는다 | applied:[Spec]…§4.2 · app/src/app/globals.css
-- [x] T15| CORE  | 아바타 에셋 부재(D4)로 아동 홈을 계속 미룰 수 없다 | status:RESOLVED | decision:이모지 조합으로 세우고 화면에 「예시」를 적는다. D4는 여전히 미결이며 Avatar.tsx 만 갈아끼우면 된다. T10(범위 제외)을 이 결정이 대체한다 | applied:app/src/components/child/Avatar.tsx · [Spec]…§1.3
+- [x] T15| CORE  | 아바타 에셋 부재(D4)로 아동 홈을 계속 미룰 수 없다 | status:RESOLVED | decision:이모지 조합 + CSS 3D 회전으로 세우고 화면에 「예시」를 적는다. three.js 를 넣지 않는 이유는 REQ-TEC-007 예외를 늘리는 결정이고 D4·B4 게이트를 되살리기 때문이다. ADR-T05가 3D→2.5D 전환의 대가로 「회전이 사라진다」를 적었고 그 전환은 아직 승인 전이라, 회전이 있는 화면을 먼저 만들어 판단 근거로 삼는다. T10(범위 제외)을 이 결정이 대체한다 | applied:app/src/components/child/Avatar.tsx · [Spec]…§4.2.1 · reports/proto/child-home-back.png
 ```
 
 ---

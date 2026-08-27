@@ -277,6 +277,10 @@ body {
 .ff-star-earn { animation: var(--ff-star-anim) var(--ff-motion); }
 .ff-fade      { animation: ff-fade-in var(--ff-motion); }
 
+/* 아바타 회전 — 렌더러 없이 CSS 3D 로만 (원장 T15 · ADR-T05 재검토용) */
+.ff-avatar-spin { transition: transform var(--ff-motion); }
+
 @media (prefers-reduced-motion: reduce) {
   .ff-star-earn, .ff-fade { animation: none; }
+  .ff-avatar-spin { transition: none; }
 }

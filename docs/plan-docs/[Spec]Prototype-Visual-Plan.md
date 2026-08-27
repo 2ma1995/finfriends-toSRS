@@ -228,6 +228,26 @@
 **두 모드는 같은 토큰 이름 집합을 가져야 한다.** 한쪽에만 있으면 그 모드에서만 화면이 깨진다.
 `python3 tools/verify_proto_structure.py` 가 대칭을 검사한다.
 
+### 4.2.1 🔴 아바타 회전을 CSS 3D 로 만든 이유
+
+ADR-T05가 3D → Lottie 2.5D 전환의 대가로 *"**회전이 사라진다**"* 를 적어 뒀고,
+그 전환은 **D4와 함께 아직 승인 전**이다. 승인 여부를 판단하려면 **회전이 있는 화면을 먼저 봐야 한다.**
+
+그래서 렌더러를 추가하지 않고 `transform-style: preserve-3d` + `rotateY` 로만 세웠다.
+
+| | |
+| --- | --- |
+| 의존성 추가 | **0건** — REQ-TEC-007(UI 의존성 0건 · Lottie 예외 1건)을 건드리지 않는다 |
+| 번들 증가 | **0KB** |
+| D4 · B4 게이트 | 건드리지 않는다 — 3D 에셋 제작을 되살리지 않는다 |
+| 확인하려는 것 | **회전이 아이에게 의미가 있는가** 하나 |
+
+**three.js 도입은 이 화면으로 회전의 값어치를 확인한 뒤에 판단한다.**
+도입한다면 REQ-TEC-007 예외를 2건으로 늘리는 결정이므로 §8 충돌 대장 X2와 ADR-T05를 함께 고쳐야 한다.
+
+전환은 `.ff-avatar-spin` 클래스가 갖는다 — 인라인 `transition` 을 쓰면
+`prefers-reduced-motion` 이 걸리지 않는다.
+
 ### 4.3 모션
 
 CSS 전용이다. **Lottie · GSAP 을 설치하지 않는다** — 로컬 최소안 §2에서 정적 표현으로 대체하기로 했다.
@@ -256,7 +276,7 @@ CSS 전용이다. **Lottie · GSAP 을 설치하지 않는다** — 로컬 최�
 | `parent/TreeArt` | 단계별 정적 표현 · **Lottie 없음** (D6 예시값) |
 | `parent/InactivityBanner` | 정체를 **조건의 문제**로 쓴다 (AC-3.2) |
 | `child/StarHUD` | 별 잔액 · fun 모드에서만 튄다 |
-| `child/Avatar` | **D4 미결 대체물** — 이모지 조합. 에셋이 오면 이 파일만 갈아끼운다 |
+| `child/Avatar` | **D4 미결 대체물** — 이모지 조합 + **CSS 3D 회전**. 에셋이 오면 이 파일만 갈아끼운다 |
 
 ### 5.2 shadcn 설치본 7종
 
@@ -331,13 +351,13 @@ v1.x의 상태 드롭다운은 없앴다. **화면이 라우트로 갈리므로 
 
 ### 7.3 스크린샷
 
-`reports/proto/` 에 **라우트 13건 + 색인 1장 + 회고 두 갈래 1장 = 15장**.
+`reports/proto/` 에 **라우트 13건 + 색인 1장 + 회고 두 갈래 1장 + 아바타 뒷모습 1장 = 16장**.
 
 ```
 index.png
 consent.png  parent-onboarding.png  parent-tree.png  parent-forest.png
 parent-missions.png  parent-spending.png
-child-home.png  child-learn.png  child-quiz.png  child-plan-new.png
+child-home.png  child-home-back.png  child-learn.png  child-quiz.png  child-plan-new.png
 child-retro-met.png  child-retro-over.png  child-wishlist.png  child-stars.png
 ```
 
@@ -347,6 +367,8 @@ child-retro-met.png  child-retro-over.png  child-wishlist.png  child-stars.png
 cd app && npm run build && npx next start -p 4312 &
 tools/shoot_proto.sh          # 촬영 → tools/trim_shots.py 로 하단 여백 정리
 ```
+
+아바타 뒷모습은 `?face=back` 으로 찍는다 — 🔴 촬영 전용 통로이며 UI 가 아니다.
 
 `next dev` 로는 찍히지 않는다 — HMR 웹소켓이 열려 있으면 헤드리스 크롬이 종료되지 않는다.
 

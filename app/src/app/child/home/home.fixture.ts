@@ -6,7 +6,15 @@
  */
 export type Item = { readonly key: string; readonly emoji: string; readonly name: string; readonly cost: number; readonly owned: boolean };
 
-export const me = { name: "서연", starBalance: 12, avatar: { face: "🐻", hat: "🧢", item: "🎒" } };
+/**
+ * 아바타 모습 — 앞뒤 두 면. 회전이 무언가를 보여줘야 값어치가 있다.
+ * 🔴 D4 확정 시 이 값과 Avatar.tsx 를 함께 갈아끼운다.
+ */
+export const me = {
+  name: "서연",
+  starBalance: 12,
+  avatar: { face: "🐻", hat: "🧢", item: "🎒", back: "🧸" },
+};
 
 export const wardrobe: readonly Item[] = [
   { key: "cap",   emoji: "🧢", name: "모자",   cost: 5,  owned: true },

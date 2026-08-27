@@ -35,7 +35,7 @@ shoot() {
   printf '  %s\n' "$1.png"
 }
 
-echo "라우트 13건 + 색인"
+echo "라우트 13건 + 색인 + 변형 2장"
 shoot index            /                        1100
 shoot consent          /consent                  452
 shoot parent-onboarding /parent/onboarding       452
@@ -44,6 +44,7 @@ shoot parent-forest    /parent/forest            452
 shoot parent-missions  /parent/missions          452
 shoot parent-spending  /parent/spending          452
 shoot child-home       /child/home               452
+shoot child-home-back  '/child/home?face=back'    452
 shoot child-learn      /child/learn              452
 shoot child-quiz       /child/quiz/spend         452
 shoot child-plan-new   /child/plan/new           452

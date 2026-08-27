@@ -7,14 +7,21 @@ import { me, wardrobe, todo } from "./home.fixture";
 // UX-003 · STR-003 — 아이가 여는 첫 화면
 export const metadata = { title: "내 방 · 핀프렌즈" };
 
-export default function ChildHomePage() {
+export default async function ChildHomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ face?: string }>;
+}) {
+  // 🔴 촬영 모드 — 회전한 뒷모습을 스크린샷에 담기 위한 통로다(명세 §7.3). UI 가 아니다.
+  const turned = (await searchParams).face === "back";
+
   return (
     <Screen role="아이 화면" title={`${me.name}의 방`} back={{ href: "/", label: "화면 목록" }}>
       <StarHUD balance={me.starBalance} />
 
       <div className="mt-3 rounded-card border border-line bg-surface py-5 text-center">
-        <Avatar {...me.avatar} />
-        <p className="mt-2 text-[0.78em] text-ink-mute">아바타 모습은 예시입니다 · 미확정 사양(D4)</p>
+        <Avatar look={me.avatar} initialTurned={turned} />
+        <p className="mt-3 text-[0.78em] text-ink-mute">아바타 모습은 예시입니다 · 미확정 사양(D4)</p>
       </div>
 
       <h2 className="mb-1.5 mt-4 text-[0.8em] font-bold">옷장</h2>
