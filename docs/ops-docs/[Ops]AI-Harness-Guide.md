@@ -20,14 +20,14 @@ CLAUDE.md              Claude Code 진입점 — 짧게 두고 스킬로 라우�
 skills-lock.json       외부 스킬 도입 현황 — 현재 0건 (후보 7 · 제외 3)
 .agents/
   rules/       3종     프로젝트 개요 · 기술 스택 · 개발 규범
-  skills/     11종     상황별로 꺼내 읽는 지침
+  skills/     12종     상황별로 꺼내 읽는 지침
   workflows/   2종     태스크 도출 · 규칙 추가 절차
 .claude/
   agents/      4종     서브에이전트
-  skills/     11개     → .agents/skills/* 심링크
+  skills/     12개     → .agents/skills/* 심링크
 ```
 
-## 2. 스킬 11종
+## 2. 스킬 12종
 
 | 번호 | 스킬 | 언제 읽나 |
 | :-: | --- | --- |
@@ -42,6 +42,7 @@ skills-lock.json       외부 스킬 도입 현황 — 현재 0건 (후보 7 · 
 | 303 | `no-ai-by-default` | **AI를 쓰고 싶어질 때** |
 | **304** | **`compliance-gates`** | **규제·보안 항목을 건드릴 때** |
 | 400 | `task-execution-workflow` | 태스크를 구현으로 옮길 때 |
+| 401 | `prototype-visual-rules` | **프로토타입 화면을 만들 때** — 목 경계 · 상태 6종 · 슬롯 순서 |
 
 **300과 304가 이 하네스의 핵심**이다. 나머지는 보조다.
 

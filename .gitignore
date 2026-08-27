@@ -3,3 +3,9 @@ __pycache__/
 *.pyc
 29148-2018-ISOIECIEEE.pdf
 tools/_mermaid_check.html
+
+# Next.js 프로토타입 앱
+app/node_modules/
+app/.next/
+app/next-env.d.ts
+app/tsconfig.tsbuildinfo

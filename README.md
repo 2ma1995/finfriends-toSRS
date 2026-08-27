@@ -138,7 +138,8 @@ PRD의 **결정은 확정**이지만 **기준선은 실측 전**입니다. SRS�
 - [x] **역할별 디렉터리 재배치** — 파일명 규칙 통일 · 링크 검사기 추가
 - [x] **분석 문서 2건** — 추출 방법론 적합성 · 축약 가능성 검토
 - [x] **기획 심화** — 서비스 예시 페이지 · 랜딩 페이지 · 퍼널 전략 문서
-- [x] **AI 개발 하네스** — 제약 기반 규칙 + 스킬 11종 + 서브에이전트 4종
+- [x] **AI 개발 하네스** — 제약 기반 규칙 + 스킬 12종 + 서브에이전트 4종
+- [x] **로컬 시각 프로토타입** — Grill Ledger 10/10 · 화면 3종 × 상태 6종 · 스크린샷 12장
 - [ ] 미해소 3건(D-01 · D-02 · D-03) 처리
 
 ---
@@ -415,10 +416,10 @@ docs/plan-docs/[Plan]FinFriends-Execution-Plan.md          ← 생성물
 AGENTS.md          도구 공통 규칙 (Claude Code · Cursor · Gemini CLI · Codex 공용)
 CLAUDE.md          Claude Code 진입점 — 짧게 두고 스킬로 라우팅
 .agents/rules/     3종   프로젝트 개요 · 기술 스택 · 개발 규범
-.agents/skills/   11종   상황별 지침
+.agents/skills/   12종   상황별 지침
 .agents/workflows/ 2종   태스크 도출 · 규칙 추가
 .claude/agents/    4종   nextjs-server · prisma-data · ui-shadcn · compliance-gate
-.claude/skills/   11개   → .agents/skills/* 심링크
+.claude/skills/   12개   → .agents/skills/* 심링크
 ```
 
 ### 핵심 스킬 2종
@@ -479,9 +480,90 @@ SRS §1.4의 **인용 금지 10항목**을 그대로 적용했습니다. 마케�
 
 검사 결과 **금지 표현 0건**입니다.
 
+### `web/service-example.html` 과 `app/` 은 다른 물건입니다
+
+| | `web/service-example.html` | `app/` (§16) |
+| --- | --- | --- |
+| 목적 | **보여주기** — 링크만 열면 끝 | **개발의 시작점** — 화면 코드가 이어진다 |
+| 실행 | 파일 더블클릭 · 빌드 없음 | `npm install && npm run dev` |
+| 스택 | 단일 HTML · 인라인 CSS/JS | Next.js 16 · Tailwind v4 · shadcn/ui |
+| 화면 | 3종 · 상태 6종 (같음) | 3종 · 상태 6종 (같음) |
+
+**둘 다 남깁니다.** 제출·공유에는 HTML이, 개발 착수에는 앱이 필요합니다.
+문구와 상태 정의는 **같은 명세(§16)를 원천으로** 하므로 갈라지지 않습니다.
+
 ---
 
-## 16. 도구
+## 16. 로컬 시각 프로토타입
+
+**기능 개발의 시작점**입니다. 화면·문구·상태 전환만 실물로 확인하고, 데이터는 목으로 고정합니다.
+근거는 SRS §9.4 선결 과제 ④ — *"프로토타입 1~2주"* 가 이미 계획에 있습니다.
+
+### 착수 전에 결정한 것 — Grill Ledger
+
+`docs/grill/GRILL_LEDGER.md` 에 **토픽 10건**을 세워 전부 해소했습니다(10/10 · CLOSED).
+결정 없이 착수하면 에이전트가 매번 다른 화면을 만듭니다.
+
+| 토픽 | 결정 |
+| --- | --- |
+| T1 상태 목록 | **상태 6종 × 화면 3종** — 7번째를 만들지 않는다 |
+| T2 정보 구조 | **슬롯 순서 고정** — 나무 5 · 대조 5 · 숲 4 |
+| T4 디자인 토큰 | 아트보드 추출 — 크림 `#FAF7F1` · 딥그린 `#4F7A4A` · 테라코타 `#B36B3A` |
+| T5 컴포넌트 | shadcn **7종만** 설치 · 자체 구현 금지(D-08) |
+| T9 나무 단계 | **D6 미결** — 3단계로 진행하고 화면에 「예시값」을 남긴다 |
+| T10 아바타 | **D4 미결** — 아동 홈 화면을 범위에서 제외 |
+
+미결 사양(D4 · D6)을 **확정하지 않고 회피**한 것이 요점입니다. 지금 정하면 나중에 다시 만듭니다.
+
+### 명세와 규칙
+
+| 무엇 | 파일 |
+| --- | --- |
+| 화면 명세 | `docs/plan-docs/[Spec]Prototype-Visual-Plan.md` — 슬롯 순서 · 카피 정본 · 토큰 · 픽스처 |
+| 하네스 규칙 | `.agents/skills/401-prototype-visual-rules/SKILL.md` |
+| 범위 | `docs/plan-docs/prototype-local-scope.md` · `prototype-suggestion.md` |
+
+### 앱
+
+```
+app/                          Next.js 16 · React 19 · Tailwind v4 · shadcn(base-nova)
+  src/mocks/types.ts          픽스처 타입 — 중립판 §6.2 열거형에서 도출
+  src/mocks/fixtures.ts       상태 6종 실제 값 — 서연 · 3월 · 다이소 성수점
+  src/components/proto/       phone-frame · fixture-switcher · screens
+  src/app/page.tsx            화면 3종을 한 화면에 · 촬영 모드 `?shot=p1`
+```
+
+```bash
+cd app && npm install && npm run dev     # http://localhost:3000/?fixture=stall
+```
+
+**목은 지울 것입니다.** 각 뷰의 교체 대상을 `fixtures.ts` 머리에 적어 뒀습니다 —
+`tree → GRW-002 · GRW-001` / `review → PLN-003 · PLN-002` / `forest → GRW-004`.
+
+### 상태 스크린샷
+
+`reports/proto/` 에 **화면별 9장 + 전경 3장**. 손으로 찍지 않습니다.
+
+```bash
+cd app && npm run build && npx next start -p 4312 &
+tools/shoot_proto.sh
+```
+
+| 상태 | 화면이 말하는 것 |
+| --- | --- |
+| **정체 14일** | *"이건 아이 문제가 아니에요 · 조건 하나가 남았을 뿐입니다"* — 미충족 조건 **전부**, 가장 적게 남은 것 최상단(ACE-3.1) |
+| **계획 넘김** | ⭐ 미지급이되 **차감하지 않는다**(P-03) · 색은 테라코타이고 **경고색이 아니다** |
+| **실천 0건** | 흰 화면을 만들지 않는다 · *"첫 실천 하나면 나무가 움직입니다"*(ACE-1.1) |
+| **첫 달** | 델타를 **0으로 그리지 않는다** · *"다음 달부터 비교할 수 있어요"*(ACE-1.2) |
+
+### 이 프로토타입이 닫는 태스크는 없습니다
+
+INF-001 · UX-001 · UX-002 · UX-004 · MCK-001 등에서 **시각 확인에 필요한 부분만** 떼어 썼습니다.
+계측 · 테스트 · `prebuild` 게이트 · 배포는 범위 밖입니다(명세 §8).
+
+---
+
+## 17. 도구
 
 | 도구 | 용도 |
 | --- | --- |
@@ -496,6 +578,8 @@ SRS §1.4의 **인용 금지 10항목**을 그대로 적용했습니다. 마케�
 | `tools/analyze_tasks.py` | 분석 문서의 **근거 수치 재현** — 단계 분포 · 병합 후보 · 블로커 |
 | `tools/gh_import.py` | GitHub 라벨 · 이슈 · 프로젝트 임포트 |
 | `tools/make_task_template.py` | GitHub 이슈 템플릿 생성 |
+| `tools/shoot_proto.sh` | 프로토타입 **상태 스크린샷 12장** 촬영 (헤드리스 크롬) |
+| `tools/trim_shots.py` | 스크린샷 하단 여백 정리 — `shoot_proto.sh` 가 호출 |
 
 ```bash
 python3 tools/gen_task_list.py     # 태스크 리스트
@@ -506,6 +590,7 @@ python3 tools/gen_fasttrack_plan.py # 압축 수행 일정
 python3 tools/verify_mermaid.py    # 다이어그램 검사 페이지 생성
 python3 tools/verify_links.py      # 경로 참조 검사
 python3 tools/analyze_tasks.py     # 분석 문서 근거 수치
+tools/shoot_proto.sh               # 프로토타입 스크린샷 (app 프로덕션 서버 필요)
 ```
 
 ---

@@ -64,6 +64,7 @@ C-TEC-005·006은 유보 등록(REQ-TEC-015)일 뿐이다. 스킬 `303-no-ai-by-
 | AI를 쓰고 싶어질 때 | `303-no-ai-by-default` |
 | 규제·보안 항목을 건드릴 때 | **`304-compliance-gates`** |
 | 태스크를 구현으로 옮길 때 | `400-task-execution-workflow` |
+| **프로토타입 화면을 만들 때** | **`401-prototype-visual-rules`** |
 | 빌드·환경 변수가 깨졌을 때 | `101-build-and-env-setup` |
 | 오류를 고칠 때 | `100-error-fixing-process` |
 | 커밋·PR을 만들 때 | `200-git-commit-push-pr` |
