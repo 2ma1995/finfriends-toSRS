@@ -10,10 +10,12 @@ export const metadata = { title: "내 방 · 핀프렌즈" };
 export default async function ChildHomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ turn?: string }>;
+  searchParams: Promise<{ turn?: string; edit?: string }>;
 }) {
-  // 🔴 촬영 통로 — 방을 돌린 각도. 헤드리스에서 rAF 가 안 돌아 회전을 증거로 못 남긴다
-  const turn = Number((await searchParams).turn ?? 0) || 0;
+  // 🔴 촬영 통로 — 방 각도와 꾸미기 모드. 헤드리스에서 클릭을 못 하므로 URL 로 연다
+  const sp = await searchParams;
+  const turn = Number(sp.turn ?? 0) || 0;
+  const startEdit = sp.edit === "1";
   const ownedCount = placed.length;
 
   return (
@@ -21,7 +23,7 @@ export default async function ChildHomePage({
       <StarHUD balance={me.starBalance} />
 
       <div className="mt-3 rounded-card border border-line bg-surface py-3">
-        <RoomStage items={placed} turn={turn} />
+        <RoomStage items={placed} turn={turn} startEdit={startEdit} />
         <p className="mt-1 text-center text-[0.72em] text-ink-mute">
           아바타 · 펫 · 아이템 모습은 예시입니다 · 미확정 사양(D4)
         </p>
