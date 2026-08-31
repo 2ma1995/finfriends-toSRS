@@ -634,6 +634,7 @@ INF-001 · UX-001 · UX-002 · UX-004 · MCK-001 등에서 **시각 확인에 �
 | `tools/verify_proto_copy.py` | 명세 §3.2 **확정 문구 ↔ fixture** 대조 — 목이 새는지 본다 |
 | `tools/verify_proto_structure.py` | 라우트 수 · `PROTO-DATA:` 마커 · **두 모드 토큰 대칭** 검사 |
 | `tools/verify_room_drag.py` | **방 꾸미기 드래그 검증** — CDP 로 진짜 포인터 이벤트를 넣는다 |
+| `tools/verify_room_stack.py` | **겹침 검증** — 아이템을 다른 것 위로 끌어 얹히는지 본다 |
 | `tools/split_goal_prompt.py` | `/goal` 규범 원본에서 **프롬프트 본문만 분리** — 실행 기록 생성 |
 
 ```bash
@@ -649,6 +650,7 @@ python3 tools/verify_tokens.py     # 디자인 토큰 검사
 python3 tools/verify_proto_copy.py # 확정 문구 대조
 python3 tools/verify_proto_structure.py # 라우트·마커·토큰 대칭
 python3 tools/verify_room_drag.py  # 방 꾸미기 드래그 (서버 필요)
+python3 tools/verify_room_stack.py # 겹침 → 위로 얹기 (서버 필요)
 tools/shoot_proto.sh               # 프로토타입 스크린샷 (app 프로덕션 서버 필요)
 ```
 

@@ -44,14 +44,22 @@ export function RoomStage({ items, turn = 0, startEdit = false }: {
     try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* 무시 */ }
   }, []);
 
-  const onMove = useCallback((id: string, p: { x: number; z: number; ry: number }) => {
-    persist({ ...layout, [id]: p });
+  // 놓을 때 방 전체가 다시 정렬돼서 온다 — 받침을 치우면 위의 것이 내려온다
+  const onMove = useCallback((id: string, _p: { x: number; z: number; ry: number; y: number }, all: Layout) => {
+    persist({ ...layout, ...all });
   }, [layout, persist]);
 
   const rotate = (deg: number) => {
     if (!sel) return;
     const cur = layout[sel] ?? { x: 0, z: 0, ry: 0 };
     persist({ ...layout, [sel]: { ...cur, ry: cur.ry + deg } });
+  };
+
+  const drop = () => {
+    if (!sel) return;
+    const cur = layout[sel];
+    if (!cur) return;
+    persist({ ...layout, [sel]: { ...cur, y: 0 } });   // 바닥으로 내린다
   };
 
   const reset = () => {
@@ -72,13 +80,20 @@ export function RoomStage({ items, turn = 0, startEdit = false }: {
       {edit ? (
         <>
           <p className="text-[0.74em] text-ink-soft">
-            {selName ? <>「{selName}」를 골랐어요 · <b>끌어서 옮기기</b></> : "옮기고 싶은 것을 눌러 보세요"}
+            {selName ? (
+              <>
+                「{selName}」를 골랐어요 · <b>끌어서 옮기기</b>
+                {layout[sel!]?.y ? <> · 위에 얹혀 있어요</> : null}
+              </>
+            ) : "옮기고 싶은 것을 눌러 보세요"}
           </p>
           <div className="flex flex-wrap justify-center gap-1.5">
             <button onClick={() => rotate(-45)} disabled={!sel}
                     className="min-h-touch rounded-card border border-line bg-surface px-3 text-[0.8em] disabled:opacity-40">↺ 왼쪽</button>
             <button onClick={() => rotate(45)} disabled={!sel}
                     className="min-h-touch rounded-card border border-line bg-surface px-3 text-[0.8em] disabled:opacity-40">↻ 오른쪽</button>
+            <button onClick={drop} disabled={!sel || !(layout[sel]?.y)}
+                    className="min-h-touch rounded-card border border-line bg-surface px-3 text-[0.8em] disabled:opacity-40">↓ 바닥에</button>
             <button onClick={reset}
                     className="min-h-touch rounded-card border border-line bg-surface px-3 text-[0.8em]">처음으로</button>
             <button onClick={() => { setEdit(false); setSel(null); }}

@@ -16,7 +16,16 @@ import type { Item } from "@/app/child/home/room.fixture";
  * 카탈로그(`room.fixture.ts`)가 어느 쪽인지 들고 있고 이 컴포넌트는 그대로 따른다.
  * 에셋은 전부 Kenney CC0 — `public/models/LICENSE.md`.
  */
-export type Layout = Record<string, { x: number; z: number; ry: number }>;
+export type Layout = Record<string, { x: number; z: number; ry: number; y?: number }>;
+
+/** 아이템이 차지하는 자리 — 위에 얹을 높이를 계산할 때 쓴다 */
+type Footprint = { hw: number; hd: number; h: number };
+
+/** XZ 평면에서 겹치는가 — 살짝 줄여서 스치기만 해도 얹히지 않게 한다 */
+function overlaps(ax: number, az: number, a: Footprint, bx: number, bz: number, b: Footprint) {
+  const m = 0.82;
+  return Math.abs(ax - bx) < (a.hw + b.hw) * m && Math.abs(az - bz) < (a.hd + b.hd) * m;
+}
 
 function makeHat() {
   const g = new THREE.Group();
@@ -58,7 +67,7 @@ export function Room3D({
   turn?: number;
   edit?: boolean;
   layout: Layout;
-  onMove?: (id: string, pos: { x: number; z: number; ry: number }) => void;
+  onMove?: (id: string, pos: { x: number; z: number; ry: number; y: number }, all: Layout) => void;
   onSelect?: (id: string | null) => void;
   selectedId?: string | null;
 }) {
@@ -73,17 +82,22 @@ export function Room3D({
 
   const api = useRef<{
     holders: Map<string, THREE.Object3D>;
+    prints: Map<string, Footprint>;
+    supports: Set<string>;
     ring: THREE.Mesh | null;
     room: THREE.Group | null;
-  }>({ holders: new Map(), ring: null, room: null });
+  }>({ holders: new Map(), prints: new Map(), supports: new Set(), ring: null, room: null });
 
   // 바깥에서 고른 것 · 좌표가 바뀌면 장면에 반영한다
   useEffect(() => {
     const { holders, ring } = api.current;
     for (const [id, h] of holders) {
       const p = layout[id];
-      if (p) { h.position.set(p.x, 0, p.z); h.rotation.y = (p.ry * Math.PI) / 180; }
-      if (ring && selectedId === id) { ring.position.set(h.position.x, 0.02, h.position.z); ring.visible = true; }
+      if (p) { h.position.set(p.x, p.y ?? 0, p.z); h.rotation.y = (p.ry * Math.PI) / 180; }
+      if (ring && selectedId === id) {
+        ring.position.set(h.position.x, h.position.y + 0.02, h.position.z);
+        ring.visible = true;
+      }
     }
     if (ring && !selectedId) ring.visible = false;
   }, [layout, selectedId]);
@@ -147,13 +161,75 @@ export function Room3D({
           const { holder } = await loadProp(it.model, it.size);
           if (!alive) return;
           holder.userData.itemId = it.id;
+          const bb = new THREE.Box3().setFromObject(holder);
+          const bs = new THREE.Vector3();
+          bb.getSize(bs);
+          api.current.prints.set(it.id, { hw: bs.x / 2, hd: bs.z / 2, h: bs.y });
+          // 펫은 받침으로 쓰지 않는다 — 고양이 위에 케이크가 올라가면 이상하다
+          if (it.placement.kind === "floor") api.current.supports.add(it.id);
+
           const p = layoutRef.current[it.id];
-          if (p) { holder.position.set(p.x, 0, p.z); holder.rotation.y = (p.ry * Math.PI) / 180; }
+          if (p) { holder.position.set(p.x, p.y ?? 0, p.z); holder.rotation.y = (p.ry * Math.PI) / 180; }
           holders.set(it.id, holder);
           room.add(holder);
         } catch { /* 하나 실패해도 방은 그린다 */ }
       }
     })().catch(() => alive && setState("failed"));
+
+    /**
+     * (x, z) 에 놓을 때 **얹힐 높이**.
+     * 자기 발자국과 겹치는 것들 중 제일 높은 윗면을 고른다. 없으면 바닥(0).
+     * `skipAbove` 를 주면 그보다 높이 뜬 것은 받침으로 치지 않는다 — 자기 위의 물건에
+     * 다시 얹히는 되먹임을 막는다.
+     */
+    const supportY = (id: string, x: number, z: number, skipAbove = Infinity) => {
+      const { holders: hs, prints, supports } = api.current;
+      const me = prints.get(id);
+      if (!me) return 0;
+      let top = 0;
+      for (const [oid, oh] of hs) {
+        if (oid === id || !supports.has(oid)) continue;
+        const op = prints.get(oid);
+        if (!op) continue;
+        if (oh.position.y > skipAbove) continue;
+        if (!overlaps(x, z, me, oh.position.x, oh.position.z, op)) continue;
+        top = Math.max(top, oh.position.y + op.h);
+      }
+      return +top.toFixed(3);
+    };
+
+    /**
+     * 전체 재정렬 — 놓은 뒤에 한 번 돌린다.
+     * 낮은 것부터 확정해 나가면 순환이 생기지 않는다.
+     * 받침을 치우면 그 위에 있던 것이 다시 내려온다.
+     */
+    const restack = () => {
+      const { holders: hs } = api.current;
+      const ids = [...hs.keys()].sort((a, b) => hs.get(a)!.position.y - hs.get(b)!.position.y);
+      const done: string[] = [];
+      for (const id of ids) {
+        const h = hs.get(id)!;
+        let top = 0;
+        const me = api.current.prints.get(id);
+        if (me) {
+          for (const oid of done) {
+            if (!api.current.supports.has(oid)) continue;
+            const oh = hs.get(oid)!;
+            const op = api.current.prints.get(oid);
+            if (!op) continue;
+            if (overlaps(h.position.x, h.position.z, me, oh.position.x, oh.position.z, op)) {
+              top = Math.max(top, oh.position.y + op.h);
+            }
+          }
+        }
+        h.position.y = +top.toFixed(3);
+        done.push(id);
+      }
+      return Object.fromEntries([...hs].map(([id, h]) => [id, {
+        x: +h.position.x.toFixed(2), z: +h.position.z.toFixed(2),
+        y: +h.position.y.toFixed(3), ry: Math.round((h.rotation.y * 180) / Math.PI),
+      }]));
+    };
 
     let raf = 0;
     const tick = () => { mixer?.update(clock.getDelta()); renderer.render(scene, camera); raf = requestAnimationFrame(tick); };
@@ -225,20 +301,20 @@ export function Room3D({
         const r = Math.hypot(p.x, p.z);
         if (r > FLOOR_R) { p.x = (p.x / r) * FLOOR_R; p.z = (p.z / r) * FLOOR_R; }
         const holder = holders.get(dragId)!;
-        holder.position.set(p.x, 0, p.z);
-        ring.position.set(p.x, 0.02, p.z);
+        // 겹치면 파고들지 않고 **위로 얹는다**
+        const y = supportY(dragId, p.x, p.z, holder.position.y + 0.001);
+        holder.position.set(p.x, y, p.z);
+        ring.position.set(p.x, y + 0.02, p.z);
         ring.visible = true;
       }
     };
 
     const up = () => {
       if (mode === "drag" && dragId) {
+        const next = restack();               // 받침이 사라졌으면 위의 것이 내려온다
         const holder = holders.get(dragId)!;
-        cbs.current.onMove?.(dragId, {
-          x: +holder.position.x.toFixed(2),
-          z: +holder.position.z.toFixed(2),
-          ry: Math.round((holder.rotation.y * 180) / Math.PI),
-        });
+        ring.position.set(holder.position.x, holder.position.y + 0.02, holder.position.z);
+        cbs.current.onMove?.(dragId, next[dragId], next);
       }
       mode = "none"; dragId = null;
       dom.style.cursor = edit ? "pointer" : "grab";
