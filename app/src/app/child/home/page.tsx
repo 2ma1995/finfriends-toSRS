@@ -1,7 +1,7 @@
 import { Screen } from "@/components/shared/Screen";
 import { StarHUD } from "@/components/child/StarHUD";
 import Link from "next/link";
-import { AvatarStage } from "@/components/child/AvatarStage";
+import { AvatarStage, type AvatarMode } from "@/components/child/AvatarStage";
 import { me, wardrobe, todo } from "./home.fixture";
 
 // UX-003 · STR-003 — 아이가 여는 첫 화면
@@ -14,7 +14,8 @@ export default async function ChildHomePage({
 }) {
   // 🔴 실험 통로 — ?avatar=three 로 three.js 아바타를 켠다. 기본은 CSS 3D.
   const sp = await searchParams;
-  const mode = sp.avatar === "three" ? "three" : "css";
+  const mode: AvatarMode =
+    sp.avatar === "glb" ? "glb" : sp.avatar === "three" ? "prim" : "css";
   const turn = Number(sp.turn ?? 0) || 0;
 
   return (
@@ -25,11 +26,16 @@ export default async function ChildHomePage({
         <AvatarStage look={me.avatar} mode={mode} turn={turn} />
         <p className="mt-3 text-[0.78em] text-ink-mute">아바타 모습은 예시입니다 · 미확정 사양(D4)</p>
         {/* 🔴 실험 전용 스위치. 고르고 나면 지운다 */}
-        <p className="mt-1 text-[0.72em]">
-          <Link href={mode === "three" ? "/child/home" : "/child/home?avatar=three"}
-                className="text-ink-mute underline underline-offset-2">
-            {mode === "three" ? "CSS 3D 로 보기" : "three.js 로 보기"}
-          </Link>
+        <p className="mt-1 flex justify-center gap-3 text-[0.72em]">
+          {([["css", "이모지"], ["three", "도형 3D"], ["glb", "모델 3D"]] as const).map(([q, label]) => {
+            const on = mode === (q === "three" ? "prim" : q);
+            return (
+              <Link key={q} href={q === "css" ? "/child/home" : `/child/home?avatar=${q}`}
+                    className={on ? "font-bold text-ink" : "text-ink-mute underline underline-offset-2"}>
+                {label}
+              </Link>
+            );
+          })}
         </p>
       </div>
 
