@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Screen } from "@/components/shared/Screen";
 import { StarHUD } from "@/components/child/StarHUD";
-import { Avatar } from "@/components/child/Avatar";
+import Link from "next/link";
+import { AvatarStage } from "@/components/child/AvatarStage";
 import { me, wardrobe, todo } from "./home.fixture";
 
 // UX-003 · STR-003 — 아이가 여는 첫 화면
@@ -10,18 +10,27 @@ export const metadata = { title: "내 방 · 핀프렌즈" };
 export default async function ChildHomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ face?: string }>;
+  searchParams: Promise<{ face?: string; avatar?: string; turn?: string }>;
 }) {
-  // 🔴 촬영 모드 — 회전한 뒷모습을 스크린샷에 담기 위한 통로다(명세 §7.3). UI 가 아니다.
-  const turned = (await searchParams).face === "back";
+  // 🔴 실험 통로 — ?avatar=three 로 three.js 아바타를 켠다. 기본은 CSS 3D.
+  const sp = await searchParams;
+  const mode = sp.avatar === "three" ? "three" : "css";
+  const turn = Number(sp.turn ?? 0) || 0;
 
   return (
     <Screen role="아이 화면" title={`${me.name}의 방`} back={{ href: "/", label: "화면 목록" }}>
       <StarHUD balance={me.starBalance} />
 
       <div className="mt-3 rounded-card border border-line bg-surface py-5 text-center">
-        <Avatar look={me.avatar} initialTurned={turned} />
+        <AvatarStage look={me.avatar} mode={mode} turn={turn} />
         <p className="mt-3 text-[0.78em] text-ink-mute">아바타 모습은 예시입니다 · 미확정 사양(D4)</p>
+        {/* 🔴 실험 전용 스위치. 고르고 나면 지운다 */}
+        <p className="mt-1 text-[0.72em]">
+          <Link href={mode === "three" ? "/child/home" : "/child/home?avatar=three"}
+                className="text-ink-mute underline underline-offset-2">
+            {mode === "three" ? "CSS 3D 로 보기" : "three.js 로 보기"}
+          </Link>
+        </p>
       </div>
 
       <h2 className="mb-1.5 mt-4 text-[0.8em] font-bold">옷장</h2>
