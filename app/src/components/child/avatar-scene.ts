@@ -108,7 +108,7 @@ export function makeScene(renderer: THREE.WebGLRenderer) {
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.5;   // 너무 올리면 색이 바랜다
+  scene.environmentIntensity = 0.42;   // 너무 올리면 색이 바랜다
 
   const key = new THREE.DirectionalLight(0xfffaf0, 2.6);
   key.position.set(2.6, 4.4, 3.2);
@@ -136,6 +136,27 @@ export function addGroundShadow(scene: THREE.Scene, y: number, size = 8) {
   g.receiveShadow = true;
   scene.add(g);
   return g;
+}
+
+/** 임의 GLB — 최대 변을 target 으로 맞추고 바닥에 앉힌다. kit 마다 원본 스케일이 다르다 */
+export async function loadProp(url: string, target: number) {
+  const gltf = await new GLTFLoader().loadAsync(url);
+  const root = gltf.scene;
+  root.traverse((o) => {
+    if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; }
+  });
+  const box = new THREE.Box3().setFromObject(root);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  root.scale.setScalar(target / (Math.max(size.x, size.y, size.z) || 1));
+
+  const b2 = new THREE.Box3().setFromObject(root);
+  const c = new THREE.Vector3();
+  b2.getCenter(c);
+  const holder = new THREE.Group();
+  root.position.set(-c.x, -b2.min.y, -c.z);   // 발/바닥을 y=0 에
+  holder.add(root);
+  return { holder, clips: gltf.animations };
 }
 
 /** 캐릭터 GLB — 크기·바닥 맞춤까지 해서 돌려준다. 받은 그대로 쓰면 스케일이 제각각이다 */

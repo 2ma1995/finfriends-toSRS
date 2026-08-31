@@ -30,6 +30,7 @@ const ROUTES = {
       { href: "/child/retro/r-201",    name: "계획 ↔ 실제",  task: "PLN-003" },
       { href: "/child/wishlist",       name: "갖고 싶은 것",  task: "PRC-004" },
       { href: "/child/stars",          name: "내 별",        task: "STR-001" },
+      { href: "/child/shop",           name: "별로 바꾸기",   task: "STR-005" },
     ],
   },
 } as const;
@@ -64,7 +65,7 @@ export default function IndexPage() {
       </div>
 
       <p className="mt-6 text-[0.74rem] leading-relaxed text-ink-mute">
-        라우트 13건 · 명세 <code>docs/plan-docs/[Spec]Prototype-Visual-Plan.md</code> · 규칙 스킬 <code>401-prototype-visual-rules</code>
+        라우트 14건 · 명세 <code>docs/plan-docs/[Spec]Prototype-Visual-Plan.md</code> · 규칙 스킬 <code>401-prototype-visual-rules</code>
         <br />
         목 데이터는 화면 옆 <code>*.fixture.ts</code> 에 있고, 첫 줄 <code>{`PROTO-DATA`}:</code> 가 교체 대상 태스크를 가리킵니다.
       </p>

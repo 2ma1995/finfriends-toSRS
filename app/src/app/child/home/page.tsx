@@ -1,65 +1,56 @@
+import Link from "next/link";
 import { Screen } from "@/components/shared/Screen";
 import { StarHUD } from "@/components/child/StarHUD";
-import Link from "next/link";
-import { AvatarStage, type AvatarMode } from "@/components/child/AvatarStage";
-import { me, wardrobe, todo } from "./home.fixture";
+import { RoomStage } from "@/components/child/RoomStage";
+import { me, placed, CATEGORIES, byCategory, todo } from "./room.fixture";
 
-// UX-003 · STR-003 — 아이가 여는 첫 화면
+// UX-003 · STR-003 · STR-005 — 아이가 여는 첫 화면
 export const metadata = { title: "내 방 · 핀프렌즈" };
 
 export default async function ChildHomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ face?: string; avatar?: string; turn?: string }>;
+  searchParams: Promise<{ turn?: string }>;
 }) {
-  // 🔴 실험 통로 — ?avatar=three 로 three.js 아바타를 켠다. 기본은 CSS 3D.
-  const sp = await searchParams;
-  const mode: AvatarMode =
-    sp.avatar === "glb" ? "glb" : sp.avatar === "three" ? "prim" : "css";
-  const turn = Number(sp.turn ?? 0) || 0;
+  // 🔴 촬영 통로 — 방을 돌린 각도. 헤드리스에서 rAF 가 안 돌아 회전을 증거로 못 남긴다
+  const turn = Number((await searchParams).turn ?? 0) || 0;
+  const ownedCount = placed.length;
 
   return (
     <Screen role="아이 화면" title={`${me.name}의 방`} back={{ href: "/", label: "화면 목록" }}>
       <StarHUD balance={me.starBalance} />
 
-      <div className="mt-3 rounded-card border border-line bg-surface py-5 text-center">
-        <AvatarStage look={me.avatar} mode={mode} turn={turn} />
-        <p className="mt-3 text-[0.78em] text-ink-mute">아바타 모습은 예시입니다 · 미확정 사양(D4)</p>
-        {/* 🔴 실험 전용 스위치. 고르고 나면 지운다 */}
-        <p className="mt-1 flex justify-center gap-3 text-[0.72em]">
-          {([["css", "이모지"], ["three", "도형 3D"], ["glb", "모델 3D"]] as const).map(([q, label]) => {
-            const on = mode === (q === "three" ? "prim" : q);
-            return (
-              <Link key={q} href={q === "css" ? "/child/home" : `/child/home?avatar=${q}`}
-                    className={on ? "font-bold text-ink" : "text-ink-mute underline underline-offset-2"}>
-                {label}
-              </Link>
-            );
-          })}
+      <div className="mt-3 rounded-card border border-line bg-surface py-3">
+        <RoomStage items={placed} turn={turn} />
+        <p className="mt-1 text-center text-[0.72em] text-ink-mute">
+          아바타 · 펫 · 아이템 모습은 예시입니다 · 미확정 사양(D4)
         </p>
       </div>
 
-      <h2 className="mb-1.5 mt-4 text-[0.8em] font-bold">옷장</h2>
-      <ul className="grid grid-cols-4 gap-1.5">
-        {wardrobe.map((i) => {
-          const affordable = me.starBalance >= i.cost;
+      <div className="mt-3 flex items-center justify-between">
+        <h2 className="text-[0.82em] font-bold">내 아이템 {ownedCount}개</h2>
+        <Link href="/child/shop" className="text-[0.78em] font-bold text-primary-d">
+          별로 바꾸기 →
+        </Link>
+      </div>
+
+      <ul className="mt-1.5 grid grid-cols-6 gap-1.5">
+        {CATEGORIES.map((c) => {
+          const mine = byCategory(c.key).filter((i) => i.owned).length;
+          const all = byCategory(c.key).length;
           return (
-            <li key={i.key}
-                className={`rounded-card border p-2 text-center ${i.owned ? "border-primary-l bg-primary-bg" : "border-line bg-surface"}`}>
-              <div className={`text-[1.5em] ${!i.owned && !affordable ? "opacity-35" : ""}`}>{i.emoji}</div>
-              <div className="mt-0.5 text-[0.7em]">{i.name}</div>
-              <div className="text-[0.68em] text-ink-mute">
-                {i.owned ? "가진 것" : affordable ? `⭐ ${i.cost}` : `⭐ ${i.cost}`}
-              </div>
-              {!i.owned && !affordable ? (
-                <div className="text-[0.62em] text-ink-mute">{i.cost - me.starBalance}개 더</div>
-              ) : null}
+            <li key={c.key}>
+              <Link href={`/child/shop?c=${c.key}`}
+                    className="grid min-h-touch place-items-center rounded-card border border-line bg-surface py-1.5 text-center">
+                <span className="text-[1.2em]">{c.emoji}</span>
+                <span className="text-[0.58em] text-ink-mute">{mine}/{all}</span>
+              </Link>
             </li>
           );
         })}
       </ul>
 
-      <h2 className="mb-1.5 mt-4 text-[0.8em] font-bold">오늘 할 일</h2>
+      <h2 className="mb-1.5 mt-4 text-[0.82em] font-bold">오늘 할 일</h2>
       <ul className="grid gap-1.5">
         {todo.map((t) => (
           <li key={t.href}>

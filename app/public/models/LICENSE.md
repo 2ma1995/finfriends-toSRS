@@ -1,5 +1,25 @@
 # 3D 에셋 출처
 
+**전부 Kenney · Creative Commons CC0 · 계정 불필요 · 출처 표기 의무 없음.**
+CC0 만 쓰는 원칙을 유지한다 — CC-BY 를 하나라도 섞으면 보호자 설정에 고지 화면이 생긴다.
+
+| 카테고리 | 팩 | 개수 | 받은 날 |
+| --- | --- | :-: | --- |
+| 아바타 | [Mini Characters](https://kenney.nl/assets/mini-characters) | 1 | 2026-08-27 |
+| 펫 | [Cube Pets](https://kenney.nl/assets/cube-pets) | 6 / 24 | 2026-08-31 |
+| 가구 | [Furniture Kit](https://kenney.nl/assets/furniture-kit) | 6 / 140 | 2026-08-31 |
+| 화분 | [Nature Kit](https://kenney.nl/assets/nature-kit) | 4 / 329 | 2026-08-31 |
+| 먹을 것 | [Food Kit](https://kenney.nl/assets/food-kit) | 4 / 200 | 2026-08-31 |
+| 탈것 | [Toy Car Kit](https://kenney.nl/assets/toy-car-kit) | 3 / 157 | 2026-08-31 |
+
+🔴 **kit 마다 텍스처가 다르다.** 각 GLB 가 `Textures/colormap.png` 를 상대 경로로 참조하므로
+**카테고리 폴더마다 그 kit 의 colormap 을 넣어야 한다.** 하나로 합치면 색이 섞인다.
+`furniture` · `nature` 는 텍스처 없이 정점 색만 쓴다.
+
+---
+
+## 개별 기록
+
 ## `avatar-base.glb`
 
 | | |

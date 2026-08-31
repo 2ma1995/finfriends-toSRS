@@ -15,7 +15,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 APP = ROOT / "app" / "src" / "app"
 CSS = ROOT / "app" / "src" / "app" / "globals.css"
-EXPECTED_ROUTES = 14  # 라우트 13건 + 프로토타입 색인 1건
+EXPECTED_ROUTES = 15  # 라우트 14건 + 프로토타입 색인 1건
 
 
 def block(css, mode):
